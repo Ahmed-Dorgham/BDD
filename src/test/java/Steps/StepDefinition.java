@@ -6,12 +6,10 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 
 public class StepDefinition extends TestBase {
-
-    String invoiceNameAfterSubmitting;
+    String invoice_name_after_submitting;
     private String emailID = "ahmed2@gmail.com";
     private String password = "123456";
     private String pos_user = "ahmed@gmail.com";
@@ -23,14 +21,11 @@ public class StepDefinition extends TestBase {
     private String first_shown_item_name;
     private LoginPage loginPageObject;
     private HomePage homePageObject;
-
     private SalesInvoicesListPage sales_invoices_list_Page_object;
     private ItemsListPage items_list_page_object;
     private ItemPage item_page_object;
     private GeneralLedgerPage generalLedgerPageObject;
     private SalesInvoicePage sales_invoice_page_object;
-    private WebElement x;
-
 
     @Given("user in dafater login page")
     public void open_login_page() {
@@ -81,8 +76,8 @@ public class StepDefinition extends TestBase {
 
     @When("user verify that  Update Stock CheckBox is unchecked then submit sales invoice")
     public void verify_that_update_stock_check_box_is_unchecked_then_submit_sales_invoice() {
-        sales_invoice_page_object.getUpdateStockCheckBoxElement();
-        Assert.assertFalse(sales_invoice_page_object.getUpdateStockCheckBoxElement().isSelected());
+        sales_invoice_page_object.get_update_stock_checkBox_element();
+        Assert.assertFalse(sales_invoice_page_object.get_update_stock_checkBox_element().isSelected());
         sales_invoice_page_object.click_on_save_and_submit_button();
         sales_invoice_page_object.click_on_accept_button();
     }
@@ -90,7 +85,7 @@ public class StepDefinition extends TestBase {
     @When("user uncheck Update Stock CheckBox and verify that then submit sales invoice")
     public void uncheck_update_stock_check_box_and_verify_that_then_submit_sales_invoice() {
         sales_invoice_page_object.click_on_update_stock_checkbox_element();
-        Assert.assertFalse(sales_invoice_page_object.getUpdateStockCheckBoxElement().isSelected());
+        Assert.assertFalse(sales_invoice_page_object.get_update_stock_checkBox_element().isSelected());
         sales_invoice_page_object.click_on_save_and_submit_button();
         sales_invoice_page_object.click_on_accept_button();
     }
@@ -98,14 +93,14 @@ public class StepDefinition extends TestBase {
     @When("user click on Update Stock CheckBox then submit sales invoice")
     public void click_on_update_stock_check_box_then_submit_sales_invoice() {
         sales_invoice_page_object.click_on_update_stock_checkbox_element();
-        Assert.assertTrue(sales_invoice_page_object.getUpdateStockCheckBoxElement().isSelected());
+        Assert.assertTrue(sales_invoice_page_object.get_update_stock_checkBox_element().isSelected());
         sales_invoice_page_object.click_on_save_and_submit_button();
         sales_invoice_page_object.click_on_accept_button();
     }
 
     @When("user verify that  Update Stock CheckBox is checked then submit sales invoice")
     public void verify_that_update_stock_check_box_is_checked_then_submit_sales_invoice() {
-        Assert.assertTrue(sales_invoice_page_object.getUpdateStockCheckBoxElement().isSelected());
+        Assert.assertTrue(sales_invoice_page_object.get_update_stock_checkBox_element().isSelected());
         sales_invoice_page_object.click_on_save_and_submit_button();
         sales_invoice_page_object.click_on_accept_button();
     }
@@ -120,14 +115,14 @@ public class StepDefinition extends TestBase {
     @Then("sales invoice appear in general ledger and stock account not appear")
     public void sales_invoice_appear_in_general_ledger_and_stock_account_not_appear() throws InterruptedException {
         generalLedgerPageObject = sales_invoice_page_object.open_general_ledger();
-        String stockAccountName = generalLedgerPageObject.verifySalesInvoiceAppearedInGeneralLedger().getText();
+        String stockAccountName = generalLedgerPageObject.verify_Sales_invoice_appeared_in_genera_ledger().getText();
         Assert.assertFalse(stockAccountName.contains(" حساب المخزون"));
     }
 
     @Then("sales invoice appear in general ledger and stock account appear")
     public void sales_invoice_and_stock_account_appear_in_general_ledger() throws InterruptedException {
         generalLedgerPageObject = sales_invoice_page_object.open_general_ledger();
-        String stockAccountName = generalLedgerPageObject.verifySalesInvoiceAppearedInGeneralLedger().getText();
+        String stockAccountName = generalLedgerPageObject.verify_Sales_invoice_appeared_in_genera_ledger().getText();
         Assert.assertTrue(stockAccountName.contains(" حساب المخزون"));
     }
 
@@ -156,12 +151,12 @@ public class StepDefinition extends TestBase {
     @When("user verify that POS invoice CheckBox is checked and use sales order to create sales invoice")
     public void verify_pos_invoice_check_box_is_checked_and_use_sales_order_to_create_sales_invoice() throws InterruptedException {
         Assert.assertTrue(sales_invoice_page_object.get_pos_nvoice_checkbox_element().isSelected());
-        sales_invoice_page_object.selectSalesOrder();
+        sales_invoice_page_object.select_Sales_order();
     }
 
     @When("user enter float number in quantity field then click on save button")
     public void enter_float_number_in_quantity_field_then_click_on_save_button() {
-        sales_invoice_page_object.enterFloatNumberInQuantityField();
+        sales_invoice_page_object.enter_float_number_in_quantity_field();
         sales_invoice_page_object.click_on_save_button();
     }
 
@@ -187,14 +182,13 @@ public class StepDefinition extends TestBase {
 
     @When("user verify that  Update Stock CheckBox is unchecked then save sales invoice")
     public void save_sales_invoice() {
-
-        Assert.assertFalse(sales_invoice_page_object.getUpdateStockCheckBoxElement().isSelected());
+        Assert.assertFalse(sales_invoice_page_object.get_update_stock_checkBox_element().isSelected());
         sales_invoice_page_object.click_on_save_button();
     }
 
     @When("user verify that  Update Stock CheckBox is checked then save sales invoice")
     public void verify_that_Update_stock_checkbox_is_checked_and_save_Sales_invoice() {
-        Assert.assertTrue(sales_invoice_page_object.getUpdateStockCheckBoxElement().isSelected());
+        Assert.assertTrue(sales_invoice_page_object.get_update_stock_checkBox_element().isSelected());
         sales_invoice_page_object.click_on_save_button();
     }
 
@@ -207,20 +201,20 @@ public class StepDefinition extends TestBase {
     @When("user click on Update Stock CheckBox then save sales invoice")
     public void user_click_on_update_stock_check_box_then_save_sales_invoice() {
         sales_invoice_page_object.click_on_update_stock_checkbox_element();
-        Assert.assertTrue(sales_invoice_page_object.getUpdateStockCheckBoxElement().isSelected());
+        Assert.assertTrue(sales_invoice_page_object.get_update_stock_checkBox_element().isSelected());
         sales_invoice_page_object.click_on_save_button();
     }
 
     @When("user uncheck Update Stock CheckBox and verify that then save sales invoice")
     public void uncheck_update_stock_checkbox_and_verify_that_then_save_sales_invoice() {
         sales_invoice_page_object.click_on_update_stock_checkbox_element();
-        Assert.assertFalse(sales_invoice_page_object.getUpdateStockCheckBoxElement().isSelected());
+        Assert.assertFalse(sales_invoice_page_object.get_update_stock_checkBox_element().isSelected());
         sales_invoice_page_object.click_on_save_button();
     }
 
     @When("user enter mandatory fields in sales invoice \\( client - item )")
     public void user_enter_mandatory_fields_client_and_item() throws InterruptedException {
-        sales_invoice_page_object.createSalesInvoiceWithoutSeriesNaming(itemName_2);
+        sales_invoice_page_object.create_sales_invoice_without_Series_naming(itemName_2);
     }
 
     @Then("sales invoice not saved successfully and validation messgae appear \\(validation on document numbering series )")
@@ -231,7 +225,7 @@ public class StepDefinition extends TestBase {
 
     @When("user enter mandatory fields in sales invoice \\( client - document numbering series  )")
     public void user_enter_mandatory_fields_client_and_document_numbering_series() throws InterruptedException {
-        sales_invoice_page_object.createSalesInvoiceWithoutAddItems();
+        sales_invoice_page_object.create_sales_invoice_Without_add_items();
     }
 
     @Then("sales invoice not saved successfully and validation message appear \\(validation on add items )")
@@ -256,12 +250,12 @@ public class StepDefinition extends TestBase {
 
     @When("user enter mandatory fields in sales invoice \\(client - add item -  document numbering series) \\(without terriority)")
     public void user_enter_mandatory_ui_fields_without_terriority() throws InterruptedException {
-        sales_invoice_page_object.createSalesInvoiceWithoutTerriority(itemName_2);
+        sales_invoice_page_object.create_sales_invoice_without_terriority(itemName_2);
     }
 
     @When("user enter mandatory fields in sales invoice \\(add item -  document numbering series) \\(without client and client account )")
     public void user_enter_mandatory_ui_fields_without_client_and_client_account() throws InterruptedException {
-        sales_invoice_page_object.createSalesInvoiceWithoutClient(itemName_2);
+        sales_invoice_page_object.create_sales_invoice_without_client(itemName_2);
     }
 
     @Then("sales invoice not saved successfully and validation message appear \\(validation on all mandatory UI fields )")
@@ -280,7 +274,7 @@ public class StepDefinition extends TestBase {
 
     @When("user increase the paid amount then save sales invoice")
     public void user_increase_the_paid_amount_then_save_sales_invoice() {
-        Assert.assertTrue(sales_invoice_page_object.getUpdateStockCheckBoxElement().isSelected());
+        Assert.assertTrue(sales_invoice_page_object.get_update_stock_checkBox_element().isSelected());
         sales_invoice_page_object.click_on_advances_tab();
         sales_invoice_page_object.enter_value_in_amount_field();
         sales_invoice_page_object.click_on_save_button();
@@ -298,7 +292,7 @@ public class StepDefinition extends TestBase {
 
     @When("user apply write off on sales invoice witout specify account for write off then save sales invoice")
     public void user_apply_write_off_without_account_for_write_off_then_save_sales_invoice() {
-        Assert.assertFalse(sales_invoice_page_object.getUpdateStockCheckBoxElement().isSelected());
+        Assert.assertFalse(sales_invoice_page_object.get_update_stock_checkBox_element().isSelected());
         sales_invoice_page_object.apply_write_off_without_acount_for_write_off();
         sales_invoice_page_object.close_window();
         sales_invoice_page_object.click_on_save_button();
@@ -336,7 +330,7 @@ public class StepDefinition extends TestBase {
     @When("user uncheck Update Stock CheckBox and change quantity then save sales invoice")
     public void uncheck_update_stock_and_change_quantity_then_save_sales_invoice() {
         sales_invoice_page_object.click_on_update_stock_checkbox_element();
-        Assert.assertFalse(sales_invoice_page_object.getUpdateStockCheckBoxElement().isSelected());
+        Assert.assertFalse(sales_invoice_page_object.get_update_stock_checkBox_element().isSelected());
         sales_invoice_page_object.change_quantity_of_item();
         sales_invoice_page_object.click_on_save_button();
     }
@@ -554,16 +548,16 @@ public class StepDefinition extends TestBase {
         sales_invoice_page_object.click_on_save_and_submit_button();
         sales_invoice_page_object.click_on_accept_button();
         sales_invoice_page_object.close_window();
-        invoiceNameAfterSubmitting = sales_invoice_page_object.get_invoice_id_name();
-        Assert.assertTrue(invoiceNameAfterSubmitting.contains("INVJ"));
+        invoice_name_after_submitting = sales_invoice_page_object.get_invoice_id_name();
+        Assert.assertTrue(invoice_name_after_submitting.contains("INVJ"));
         for (int i = 0; i < 0; i++) {
             sales_invoice_page_object.click_on_make_copy_button();
             sales_invoice_page_object.select_series_number();
             sales_invoice_page_object.click_on_save_and_submit_button();
             sales_invoice_page_object.click_on_accept_button();
             sales_invoice_page_object.close_window();
-            invoiceNameAfterSubmitting = sales_invoice_page_object.get_invoice_id_name();
-            Assert.assertTrue(invoiceNameAfterSubmitting.contains("INVJ"));
+            invoice_name_after_submitting = sales_invoice_page_object.get_invoice_id_name();
+            Assert.assertTrue(invoice_name_after_submitting.contains("INVJ"));
         }
         sales_invoice_page_object.return_to_sales_invoices_list_page();
     }
@@ -624,8 +618,8 @@ public class StepDefinition extends TestBase {
             sales_invoice_page_object.click_on_save_and_submit_button();
             sales_invoice_page_object.click_on_accept_button();
             sales_invoice_page_object.close_window();
-            invoiceNameAfterSubmitting = sales_invoice_page_object.get_invoice_id_name();
-            Assert.assertTrue(invoiceNameAfterSubmitting.contains("INVJ"));
+            invoice_name_after_submitting = sales_invoice_page_object.get_invoice_id_name();
+            Assert.assertTrue(invoice_name_after_submitting.contains("INVJ"));
             sales_invoice_page_object.return_to_sales_invoices_list_page();
         }
     }

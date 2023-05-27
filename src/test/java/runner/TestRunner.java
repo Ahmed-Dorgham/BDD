@@ -4,7 +4,7 @@ import TestCases.TestBase;
 import io.cucumber.testng.CucumberOptions;
 
 @CucumberOptions(
-        features = "src/test/java/features/DeleteActionOnBulkItems.feature",
+        features = "src/test/java/features/CancelActionOnBulkSalesInvoices.feature",
         glue = {"Steps"},
         plugin = {"pretty", "html:target/cucumber-reports/cucumber.html"}
 )

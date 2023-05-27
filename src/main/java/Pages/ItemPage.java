@@ -10,15 +10,11 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
 import java.time.Duration;
-import java.util.List;
-
 import static java.time.Duration.ofSeconds;
 
 public class ItemPage extends UtilitiesMethods {
     private WebDriver driver;
-
     private JavascriptExecutor js;
     private WebDriverWait wait;
     private Wait<WebDriver> fluent_Wait;
@@ -27,7 +23,6 @@ public class ItemPage extends UtilitiesMethods {
     private WebElement item_code_field;
     private WebElement item_english_name_field;
     private WebElement item_english_name_title;
-    private WebElement default_warehouse_title;
     private WebElement save_button;
     private WebElement make_copy_button;
     private WebElement default_warehouse;
@@ -36,17 +31,14 @@ public class ItemPage extends UtilitiesMethods {
     private WebElement selected_valuation_method;
     private WebElement item_list_icon;
 
-
-    private WebElement item_group_list_element;
-    private List<WebElement> item_group_list;
-
     public ItemPage(WebDriver driver) {
         this.driver = driver;
     }
 
+    /************************************************************************************************************************************/
     public void create_item_with_all_mandatory_ui_fields(String item_name, String warehouse_name) {
         js = (JavascriptExecutor) driver;
-        wait = new WebDriverWait(driver, ofSeconds(120));
+        wait = new WebDriverWait(driver, ofSeconds(300));
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath
                 ("//div[@id='page-Form/Item']//span//h5")));
         wait.until(ExpectedConditions.elementToBeClickable(By.xpath
@@ -59,7 +51,8 @@ public class ItemPage extends UtilitiesMethods {
         selected_group = driver.findElement(By.xpath
                 ("(//a[contains(@class,'ui-corner-all')])[1]"));
         click_on_element(selected_group);
-        item_code_field = driver.findElement(By.xpath("//div[@id='page-Form/Item']//input[@data-fieldname='item_code']"));
+        item_code_field = driver.findElement(By.xpath
+                ("//div[@id='page-Form/Item']//input[@data-fieldname='item_code']"));
         enter_data_to_input_field(item_code_field, item_name);
         item_english_name_title = driver.findElement(By.xpath(
                 ("//span[contains(text(),'اسم الصنف (إنجليزي)')]")));
@@ -70,10 +63,8 @@ public class ItemPage extends UtilitiesMethods {
         default_warehouse = driver.findElement(By.xpath
                 ("//div[@id='page-Form/Item']//input[@data-fieldname='default_warehouse']"));
         enter_data_to_input_field(default_warehouse, warehouse_name);
-
         valuation_method_title = driver.findElement(By.xpath(
                 ("//span[contains(text(),' طريقة التقييم')]")));
-
         valuation_method_field = driver.findElement(RelativeLocator.with(By.xpath
                 ("(//div[@id='page-Form/Item']//button[@title='إختر'])")).below(valuation_method_title));
         click_on_element(valuation_method_field);
@@ -82,21 +73,19 @@ public class ItemPage extends UtilitiesMethods {
         selected_valuation_method = driver.findElement(By.xpath
                 ("//div[@id='page-Form/Item']//ul//span[contains(text(),'المتوسط \u200B\u200Bالمتحرك')]"));
         click_on_element(selected_valuation_method);
-
     }
 
     /****************************************************************************************************************************-*/
-
     public void enter_item_code(String item_name) {
-        item_code_field = driver.findElement(By.xpath("//div[@id='page-Form/Item']//input[@data-fieldname='item_code']"));
+        item_code_field = driver.findElement(By.xpath
+                ("//div[@id='page-Form/Item']//input[@data-fieldname='item_code']"));
         enter_data_to_input_field(item_code_field, item_name);
     }
-
 
     /*********************************************************************************************************************************/
     public void click_on_save_button() {
         js = (JavascriptExecutor) driver;
-        wait = new WebDriverWait(driver, ofSeconds(120));
+        wait = new WebDriverWait(driver, ofSeconds(300));
         js.executeScript("window.scrollTo(0,0)");
         save_button = driver.findElement(By.xpath
                 ("//button[@id='appframe-btn-حفظ']"));
@@ -109,7 +98,7 @@ public class ItemPage extends UtilitiesMethods {
 
     /**************************************************************************************************************************************/
     public void click_on_make_copy_button() {
-        wait = new WebDriverWait(driver, ofSeconds(120));
+        wait = new WebDriverWait(driver, ofSeconds(300));
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath
                 ("//div[@id='page-Form/Item']//button[@id='appframe-btn-عمل نسخة']")));
         wait.until(ExpectedConditions.elementToBeClickable(By.xpath
@@ -128,25 +117,16 @@ public class ItemPage extends UtilitiesMethods {
     }
 
     /************************************************************************************************************************************/
-
-    public void waiting_for_received_tag_element_to_be_invisible(WebElement element) {
-        fluent_Wait = new FluentWait(driver)
-                .withTimeout(Duration.ofSeconds(180))
-                .pollingEvery(Duration.ofSeconds(18))
-                .ignoring(Exception.class);
-        fluent_Wait.until(ExpectedConditions.not(ExpectedConditions.visibilityOf(element)));
-
-    }
-
     public void waiting_for_element_to_be_visible(WebElement element) {
         fluent_Wait = new FluentWait(driver)
-                .withTimeout(Duration.ofSeconds(180))
-                .pollingEvery(Duration.ofSeconds(18))
+                .withTimeout(Duration.ofSeconds(300))
+                .pollingEvery(Duration.ofSeconds(30))
                 .ignoring(Exception.class);
         fluent_Wait.until(ExpectedConditions.not(ExpectedConditions.visibilityOf(element)));
 
     }
 
+    /************************************************************************************************************************************/
     public void waiting(long seconds) throws InterruptedException {
         Thread.sleep(seconds);
     }

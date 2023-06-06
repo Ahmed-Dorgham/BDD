@@ -18,6 +18,7 @@ public class LoginPage extends UtilitiesMethods {
 
     /******************************************************************************************************************************************/
     public HomePage login_with_valid_data(String emailID, String password) {
+
         email_id_field = driver.findElement(By.id("login_id"));
         password_field = driver.findElement(By.id("pass"));
         login_button = driver.findElement(By.id("login_btn"));

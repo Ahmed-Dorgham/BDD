@@ -20,8 +20,9 @@
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
             <version>4.8.2</version>
+            <scope>compile</scope>
         </dependency>
-        <dependency>
+        <dependency>java: package org.openqa.selenium does not exist
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
             <version>7.7.0</version>
@@ -30,6 +31,7 @@
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-http-jdk-client</artifactId>
             <version>4.8.1</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>io.cucumber</groupId>

@@ -1,8 +1,9 @@
 Feature: Delete Action On Bulk Sales Invoices
 
   Background:
-    Given user login sucessfully and open sales invoice list page
+    Given user login successfully and open sales invoice list page
     And user create bulk of sales invoices and save it
+
 
   Scenario: Bulk delete N Sales Invoice (draft invoices only )
 

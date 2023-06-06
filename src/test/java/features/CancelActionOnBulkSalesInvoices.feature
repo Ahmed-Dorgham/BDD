@@ -1,7 +1,8 @@
 Feature:  Cancel Action On Bulk Sales Invoices
 
   Background:
-    Given user login sucessfully and open sales invoice list page
+    Given user login successfully and open sales invoice list page
+
 
   Scenario: Bulk Cancel N Sales Invoice (submitted or drafts invoices)(without error)
 

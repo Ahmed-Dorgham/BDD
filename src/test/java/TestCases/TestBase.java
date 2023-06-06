@@ -17,7 +17,7 @@ public class TestBase extends AbstractTestNGCucumberTests {
         driver = new ChromeDriver();
     }
 
-    @AfterClass
+  //  @AfterClass
     public void closeBrowser() {
         driver.quit();
     }

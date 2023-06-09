@@ -167,7 +167,7 @@ public class SalesInvoicePage extends UtilitiesMethods {
 
     public void select_series_number() throws InterruptedException {
         js = (JavascriptExecutor) driver;
-        Thread.sleep(3000);
+        Thread.sleep(5000);
         js.executeScript("window.scrollBy(0,250)");
         series_number_field = driver.findElement(By.xpath
                 ("(//div[@id='page-Form/Sales Invoice']//span[contains(text(),'إختر')])[1]"));
@@ -617,9 +617,11 @@ public class SalesInvoicePage extends UtilitiesMethods {
 
     /*************************************************************************************************************************************************/
     public SalesInvoicesListPage return_to_sales_invoices_list_page() {
+        js = (JavascriptExecutor) driver;
         sales_list_icon = driver.findElement(By.xpath
                 ("//div[@id='page-Form/Sales Invoice']//i[@doctype-name='Sales Invoice']"));
-        click_on_element(sales_list_icon);
+        //click_on_element(sales_list_icon);
+        js.executeScript("arguments[0].click();", sales_list_icon);
         return new SalesInvoicesListPage(driver);
     }
 

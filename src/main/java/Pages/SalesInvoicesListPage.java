@@ -1,10 +1,7 @@
 package Pages;
 
 import Utilities.UtilitiesMethods;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
@@ -12,6 +9,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 
 import static java.time.Duration.ofSeconds;
 
@@ -19,6 +17,8 @@ public class SalesInvoicesListPage extends UtilitiesMethods {
     private WebDriver driver;
     private JavascriptExecutor js;
     private WebDriverWait wait;
+    // private Wait<WebDriver> fluent_Wait;
+    // private Wait fluent_Wait;
     private Wait<WebDriver> fluent_Wait;
     private WebElement sales_invoices_list_header;
     private WebElement error_validation_message;
@@ -52,7 +52,7 @@ public class SalesInvoicesListPage extends UtilitiesMethods {
     private List<WebElement> saved_sales;
     private List<WebElement> submitted_sales;
     private WebElement saved_icon_in_row;
-    private WebElement enqueue_icon_in_row;
+    private WebElement icon_element_in_row;
     private WebElement submitted_icon_in_row;
     private WebElement invoice_id_in_row;
     private List<WebElement> rows_in_result_list;
@@ -344,6 +344,18 @@ public class SalesInvoicesListPage extends UtilitiesMethods {
     }
 
     /************************************************************************************************************************************/
+    public void close_and_scroll() {
+        js = (JavascriptExecutor) driver;
+        wait = new WebDriverWait(driver, ofSeconds(300));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath
+                ("//div[contains(@style,'display: block;')]//a[@data-dismiss='modal']")));
+        close_icon = driver.findElement(By.xpath
+                ("//div[contains(@style,'display: block;')]//a[@data-dismiss='modal']"));
+        click_on_element(close_icon);
+        js.executeScript("window.scrollTo(0,500)");
+
+    }
+    /************************************************************************************************************************************/
     public void click_on_update_icon() {
         wait = new WebDriverWait(driver, ofSeconds(300));
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath
@@ -393,76 +405,108 @@ public class SalesInvoicesListPage extends UtilitiesMethods {
         enqueue_icon_element = driver.findElement(By.xpath
                 ("//div[@class='result-list']//i[@class='fas fa-layer-group docstatus_icon']"));
     }
-
+    /************************************************************************************************************************************/
     public WebElement get_saved_icon_element() {
         saved_icon_element = driver.findElement(By.xpath
                 ("//div[@class='result-list']//i[@class='icon-computers-floppy-disk docstatus_icon']"));
         return saved_icon_element;
     }
-
+    /************************************************************************************************************************************/
     public WebElement get_saved_icon_in_row(int index) {
-        fluent_Wait = new FluentWait(driver)
+        fluent_Wait = new FluentWait<>(driver)
                 .withTimeout(Duration.ofSeconds(50))
                 .pollingEvery(Duration.ofSeconds(10))
-                .ignoring(Exception.class);
+                .ignoring(NoSuchElementException.class)
+                .ignoring(TimeoutException.class)
+                .ignoring(StaleElementReferenceException.class);
         result_list = driver.findElement(By.xpath
                 ("//div[@id='page-List/Sales Invoice']//div[@class='result']//div[@class='result-list']"));
         rows_in_result_list = result_list.findElements(By.className("list-row"));
         saved_icon_in_row = rows_in_result_list.get(index).findElement(By.xpath
-                ("//div[@id='page-List/Sales Invoice']//div[@class='result']//div[@class='result-list']//div[@class='list-row']//i[@class='icon-computers-floppy-disk docstatus_icon']"));
-        fluent_Wait.until(ExpectedConditions.visibilityOf(saved_icon_in_row));
+                ("//span//i[contains(@class,'icon-computers-floppy-disk')]"));
+
         return saved_icon_in_row;
     }
-
+    /************************************************************************************************************************************/
     public WebElement get_enqueue_icon_in_row(int index) {
-        fluent_Wait = new FluentWait(driver)
+        wait = new WebDriverWait(driver, ofSeconds(30));
+        fluent_Wait = new FluentWait<>(driver)
                 .withTimeout(Duration.ofSeconds(50))
                 .pollingEvery(Duration.ofSeconds(10))
-                .ignoring(Exception.class);
+                .ignoring(NoSuchElementException.class)
+                .ignoring(TimeoutException.class)
+                .ignoring(StaleElementReferenceException.class);
         result_list = driver.findElement(By.xpath
                 ("//div[@id='page-List/Sales Invoice']//div[@class='result']//div[@class='result-list']"));
         rows_in_result_list = result_list.findElements(By.className("list-row"));
-
-        enqueue_icon_in_row = rows_in_result_list.get(index).findElement(By.xpath(
-                ("//div[@id='page-List/Sales Invoice']//div[@class='result']//div[@class='result-list']//div[@class='list-row']//i[@class='fas fa-layer-group docstatus_icon']")));
-        fluent_Wait.until(ExpectedConditions.visibilityOf(enqueue_icon_in_row));
-        return enqueue_icon_in_row;
+        icon_element_in_row = rows_in_result_list.get(index).findElement(By.xpath(
+                ("//span//i[contains(@class,'fas fa-layer-group')]")));
+//div[@id='page-List/Sales Invoice']//div[@class='result']//div[@class='result-list']//div[@class='result-list']//span//i[contains(@class,'fas fa-layer-group')]"
+        return icon_element_in_row;
+    }
+    /************************************************************************************************************************************/
+    public WebElement get_icon_element_in_row(int index) {
+        wait = new WebDriverWait(driver, ofSeconds(30));
+        fluent_Wait = new FluentWait<>(driver)
+                .withTimeout(Duration.ofSeconds(50))
+                .pollingEvery(Duration.ofSeconds(10))
+                .ignoring(NoSuchElementException.class)
+                .ignoring(TimeoutException.class)
+                .ignoring(StaleElementReferenceException.class);
+        result_list = driver.findElement(By.xpath
+                ("//div[@id='page-List/Sales Invoice']//div[@class='result']//div[@class='result-list']"));
+        rows_in_result_list = result_list.findElements(By.className("list-row"));
+        icon_element_in_row = rows_in_result_list.get(index).findElement(By.xpath(
+                ("//div[@class='doclist-row row']//div//span//i")));
+        wait.until(ExpectedConditions.elementToBeClickable(By.xpath
+                ("(//div[@class='result-list']//input[@type='checkbox'])[1]")));
+        return icon_element_in_row;
     }
 
     /*********************************************-*********************************************************************************************/
+    public WebElement waiting_for_element_to_be_invisible(int index, By locator, String attribute_name, String attribute_value) {
+        wait = new WebDriverWait(driver, ofSeconds(300));
+        result_list = driver.findElement(By.xpath
+                ("//div[@id='page-List/Sales Invoice']//div[@class='result']//div[@class='result-list']"));
+        rows_in_result_list = result_list.findElements(By.className("list-row"));
+        icon_element_in_row = rows_in_result_list.get(index).findElement(By.xpath(
+                ("//div[@class='doclist-row row']//div//span//i")));
+        wait.until(ExpectedConditions.not(ExpectedConditions.attributeToBe(locator, attribute_name, attribute_value)));
+        return icon_element_in_row;
+    }
+    /************************************************************************************************************************************/
     public WebElement get_submitted_icon_in_row(int index) {
-        fluent_Wait = new FluentWait(driver)
+        fluent_Wait = new FluentWait<>(driver)
                 .withTimeout(Duration.ofSeconds(50))
                 .pollingEvery(Duration.ofSeconds(10))
-                .ignoring(Exception.class);
+                .ignoring(NoSuchElementException.class)
+                .ignoring(TimeoutException.class)
+                .ignoring(StaleElementReferenceException.class);
         result_list = driver.findElement(By.xpath
                 ("//div[@id='page-List/Sales Invoice']//div[@class='result']//div[@class='result-list']"));
         rows_in_result_list = result_list.findElements(By.className("list-row"));
         submitted_icon_in_row = rows_in_result_list.get(index).findElement(By.xpath
-                ("//div[@id='page-List/Sales Invoice']//div[@class='result']//div[@class='result-list']//div[@class='list-row']//i[@class='icon-lock-lock-close-1 docstatus_icon']"));
-        fluent_Wait.until(ExpectedConditions.visibilityOf(submitted_icon_in_row));
+                ("//span//i[contains(@class,'icon-lock-lock-close-1')]"));
         return submitted_icon_in_row;
     }
 
     /*****************************************************-******************************************************************************************/
     public WebElement get_invoice_id_in_row_after_action(int index) {
-        wait = new WebDriverWait(driver, ofSeconds(300));
         result_list = driver.findElement(By.xpath
                 ("//div[@id='page-List/Sales Invoice']//div[@class='result']//div[@class='result-list']"));
         rows_in_result_list = result_list.findElements(By.className("list-row"));
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath
-                ("//div[@class='result-list']//i[@class='fas fa-layer-group docstatus_icon']")));
-        invoice_id_in_row = rows_in_result_list.get(index).findElement(By.tagName("a"));
+        invoice_id_in_row = rows_in_result_list.get(index).findElement(By.partialLinkText("INV"));
+
         return invoice_id_in_row;
     }
 
     /*****************************************************-******************************************************************************************/
     public WebElement get_invoice_id_in_row_before_action(int index) {
-        wait = new WebDriverWait(driver, ofSeconds(300));
+        wait = new WebDriverWait(driver, ofSeconds(50));
         result_list = driver.findElement(By.xpath
                 ("//div[@id='page-List/Sales Invoice']//div[@class='result']//div[@class='result-list']"));
         rows_in_result_list = result_list.findElements(By.className("list-row"));
-        invoice_id_in_row = rows_in_result_list.get(index).findElement(By.tagName("a"));
+        invoice_id_in_row = rows_in_result_list.get(index).findElement(By.partialLinkText("INV"));
         return invoice_id_in_row;
     }
 
@@ -475,7 +519,7 @@ public class SalesInvoicesListPage extends UtilitiesMethods {
                 ("//div[@id='alert-container']//a"));
         return alert_notification;
     }
-
+    /************************************************************************************************************************************/
     public void waiting_for_text_not_to_be_visible_in_element(By locator, String text) {
         wait = new WebDriverWait(driver, ofSeconds(300));
         wait.until(ExpectedConditions.invisibilityOfElementWithText(locator, text));
@@ -490,18 +534,31 @@ public class SalesInvoicesListPage extends UtilitiesMethods {
 
     /************************************************************************************************************************************/
 
-    public void waiting_for_element_to_be_invisible(WebElement element) {
-        fluent_Wait = new FluentWait<WebDriver>(driver)
-                .withTimeout(Duration.ofSeconds(120))
-                .pollingEvery(Duration.ofSeconds(10))
-                .ignoring(Exception.class);
-        fluent_Wait.until(ExpectedConditions.invisibilityOf(element));
+    public void waiting_for_element_to_be_invisible(By locator, String attribute_name, String attribute_value) {
+        wait = new WebDriverWait(driver, ofSeconds(50));
+        wait.until(ExpectedConditions.not(ExpectedConditions.attributeToBe(locator, attribute_name, attribute_value)));
     }
 
     /************************************************************************************************************************************/
-
-    public void waiting_for_element_to_be_clickable(By locator) {
+    public void waiting_for_element_to_be_visible(By locator, String attribute_name, String attribute_value) {
         wait = new WebDriverWait(driver, ofSeconds(300));
+        wait.until((ExpectedConditions.attributeToBe(locator, attribute_name, attribute_value)));
+    }
+
+    /************************************************************************************************************************************/
+    public WebElement waiting_for_element_to_be_visible(int index, By locator, String attribute_name, String attribute_value) {
+        wait = new WebDriverWait(driver, ofSeconds(50));
+        result_list = driver.findElement(By.xpath
+                ("//div[@id='page-List/Sales Invoice']//div[@class='result']//div[@class='result-list']"));
+        rows_in_result_list = result_list.findElements(By.className("list-row"));
+        icon_element_in_row = rows_in_result_list.get(index).findElement(By.xpath(
+                ("//div[@class='doclist-row row']//div//span//i")));
+        wait.until(ExpectedConditions.attributeToBe(locator, attribute_name, attribute_value));
+        return icon_element_in_row;
+    }
+    /************************************************************************************************************************************/
+    public void waiting_for_element_to_be_clickable(By locator) {
+        wait = new WebDriverWait(driver, ofSeconds(50));
         wait.until(ExpectedConditions.elementToBeClickable(locator));
     }
 
@@ -547,29 +604,32 @@ public class SalesInvoicesListPage extends UtilitiesMethods {
     /************************************************************************************************************************************/
     public void wait_alert_to_be_invisible() {
         js = (JavascriptExecutor) driver;
-        fluent_Wait = new FluentWait(driver)
-                .withTimeout(Duration.ofSeconds(30))
+        fluent_Wait = new FluentWait<>(driver)
+                .withTimeout(Duration.ofSeconds(50))
                 .pollingEvery(Duration.ofSeconds(10))
-                .ignoring(Exception.class);
+                .ignoring(NoSuchElementException.class)
+                .ignoring(TimeoutException.class)
+                .ignoring(StaleElementReferenceException.class);
         fluent_Wait.until(ExpectedConditions.not(ExpectedConditions.visibilityOfElementLocated(By.
                 xpath("//div[@id='alert-container']//a"))));
         System.out.println("alert notification disappear now ");
     }
-
+    /************************************************************************************************************************************/
     public void waiting_for_element_to_be_visible(WebElement element) {
-        wait = new WebDriverWait(driver, ofSeconds(300));
-        wait.until(ExpectedConditions.not(ExpectedConditions.invisibilityOf(element)));
+        wait = new WebDriverWait(driver, ofSeconds(30));
+        wait.until(ExpectedConditions.visibilityOf(element));
     }
-
+    /************************************************************************************************************************************/
     public void fluent_waiting_for_element_to_be_visible(WebElement element) {
-
-        fluent_Wait = new FluentWait(driver)
+        fluent_Wait = new FluentWait<>(driver)
                 .withTimeout(Duration.ofSeconds(50))
                 .pollingEvery(Duration.ofSeconds(10))
-                .ignoring(Exception.class);
+                .ignoring(NoSuchElementException.class)
+                .ignoring(TimeoutException.class)
+                .ignoring(StaleElementReferenceException.class);
         fluent_Wait.until(ExpectedConditions.visibilityOf(element));
     }
-
+    /************************************************************************************************************************************/
     public void waiting_for_value_to_be_in_attribute(WebElement element, String style, String value) {
         wait = new WebDriverWait(driver, ofSeconds(300));
         wait.until(ExpectedConditions.attributeToBe(element, style, value));

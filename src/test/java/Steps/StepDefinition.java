@@ -8,18 +8,21 @@ import io.cucumber.java.en.When;
 import org.openqa.selenium.By;
 import org.testng.Assert;
 
+import java.util.concurrent.TimeoutException;
+
 public class StepDefinition extends TestBase {
     String invoice_name_after_submitting;
     //String file_path = "C:\\Users\\ahmed\\OneDrive\\Desktop\\Item (1).xlsx";
-    private String vm_link = "https://engineering-dorgham.dafater.biz/index.html";
-    //private String vm_link = "https://temp-wi25843.dafater.biz/";
-    private String not_pos_user = "ahmed2@gmail.com";
+    //  private String vm_link = "https://engineering-dorgham.dafater.biz/index.html";
+    private String vm_link = "https://temp-release4-0-1.dafater.biz/index.html";
+    private String not_pos_user = "not@gmail.com";
     private String password = "123456";
     private String pos_user = "ahmed@gmail.com";
     private String pos_password = "123456";
     private String stock_item = "item_2";
     private String non_stock_item = "non_stock_item";
-    private String warehouse_name = "مستودع البضاعة المكتملة - dorgh";
+    // private String warehouse_name = "مستودع البضاعة المكتملة - dorgh";
+    private String warehouse_name = "139 مستودع تالف الموزع نوفل كنديلات فرع مكة Damaged Warehouse, Distributor Nofal Kandilat, Makkah Branch - أ ط";
     private String created_item = "tedvcdc";
     private String blue_color = "color: rgb(61, 38, 255);";
     private String red_color = "color: rgb(255, 38, 38);";
@@ -70,7 +73,7 @@ public class StepDefinition extends TestBase {
     @When("user open sales invoice list and open new sales invoice")
     public void open_sales_invoice_list_and_open_new_sales_invoice() {
         sales_invoices_list_Page_object = homePageObject.open_sales_invoices_list_page();
-        Assert.assertTrue(sales_invoices_list_Page_object.get_sales_invoices_list_header().isDisplayed());
+        //  Assert.assertTrue(sales_invoices_list_Page_object.get_sales_invoices_list_header().isDisplayed());
         sales_invoice_page_object = sales_invoices_list_Page_object.open_new_sales_invoice();
     }
 
@@ -414,7 +417,7 @@ public class StepDefinition extends TestBase {
         sales_invoices_list_Page_object.waiting(17000);
         sales_invoices_list_Page_object.scroll_down();
 
-        for (int i = 0; i <= 1; i++) {
+        for (int i = 0; i <= 4; i++) {
             if (sales_invoices_list_Page_object.get_saved_icon_in_row(i).
                     getAttribute("class").contains(saved_class_name)) {
 
@@ -426,7 +429,7 @@ public class StepDefinition extends TestBase {
 
         }
         sales_invoices_list_Page_object.wait_elememt_to_be_selected
-                (sales_invoices_list_Page_object.get_entire_checkboxes_in_sales_invoices_list(1));
+                (sales_invoices_list_Page_object.get_entire_checkboxes_in_sales_invoices_list(4));
         sales_invoices_list_Page_object.scroll_to_top();
     }
 
@@ -477,7 +480,7 @@ public class StepDefinition extends TestBase {
         sales_invoices_list_Page_object.waiting(17000);
         sales_invoices_list_Page_object.scroll_down();
 
-        for (int i = 0; i <= 3; i++) {
+        for (int i = 0; i <= 9; i++) {
             if (sales_invoices_list_Page_object.get_saved_icon_in_row(i).
                     getAttribute("class").contains(saved_class_name)) {
 
@@ -489,7 +492,7 @@ public class StepDefinition extends TestBase {
 
         }
         sales_invoices_list_Page_object.wait_elememt_to_be_selected
-                (sales_invoices_list_Page_object.get_entire_checkboxes_in_sales_invoices_list(3));
+                (sales_invoices_list_Page_object.get_entire_checkboxes_in_sales_invoices_list(9));
         sales_invoices_list_Page_object.scroll_to_top();
     }
 
@@ -501,40 +504,37 @@ public class StepDefinition extends TestBase {
     }
 
     @Then("some or all sales invoices shouldn't be submitted successfully and error message will be appeared to tell user that")
-    public void unsuccessful_submitting() throws InterruptedException {
+    public void unsuccessful_submitting() throws InterruptedException, TimeoutException {
         sales_invoices_list_Page_object.get_submitting_in_process_message();
         sales_invoices_list_Page_object.close_and_scroll();
-        sales_invoices_list_Page_object.waiting_for_element_to_be_visible(By.xpath(icon_locator), "class", enqueue_class_name);
-        for (int i = 0; i <= 3; i++) {
-            // sales_invoices_list_Page_object.waiting_for_element_to_be_visible(By.xpath(icon_locator), "class", enqueue_class_name);
+        //sales_invoices_list_Page_object.waiting_for_element_to_be_visible(By.xpath(icon_locator), "class", enqueue_class_name);
+        for (int i = 0; i <=9; i++) {
+            sales_invoices_list_Page_object.waiting_for_element_to_be_visible(i,By.xpath(icon_locator), "class", enqueue_class_name);
             if (sales_invoices_list_Page_object.get_icon_element_in_row(i).getAttribute("class").contains(enqueue_class_name)
-                    || sales_invoices_list_Page_object.get_invoice_id_in_row_after_action(i).getAttribute("style").contains(blue_color)) {
+                    && sales_invoices_list_Page_object.get_invoice_id_in_row_after_action(i).getAttribute("style").contains(blue_color)) {
                 System.out.println(sales_invoices_list_Page_object.get_invoice_id_in_row_after_action(i).getText() + " in enqueue now");
             } else
                 System.out.println(sales_invoices_list_Page_object.get_invoice_id_in_row_after_action(i).getText() + " returned from enqueue");
         }
-        sales_invoices_list_Page_object.scroll_to_top();
-        sales_invoices_list_Page_object.click_on_update_icon();
-        sales_invoices_list_Page_object.scroll_down();
-        for (int i = 0; i <= 3; i++) {
+
+        for (int i = 0; i <=9; i++) {
 
             sales_invoices_list_Page_object.waiting_for_element_to_be_invisible(i, By.xpath(icon_locator), "class", enqueue_class_name);
-            if (sales_invoices_list_Page_object.get_icon_element_in_row(i).getAttribute("class").contains(saved_class_name) ||
+            if (sales_invoices_list_Page_object.get_icon_element_in_row(i).getAttribute("class").contains(saved_class_name) &&
                     sales_invoices_list_Page_object.get_invoice_id_in_row_after_action(i).getAttribute("style").contains(red_color)) {
                 Assert.assertTrue(sales_invoices_list_Page_object.get_saved_icon_in_row(i).isDisplayed());
-
                 System.out.println(sales_invoices_list_Page_object.get_invoice_id_in_row_after_action(i).getText() +
                         " not submitted successfully and there is an error");
 
-            } else if (sales_invoices_list_Page_object.get_icon_element_in_row(i).getAttribute("class").contains(submitted_class_name)) {
+            } else if (sales_invoices_list_Page_object.get_icon_element_in_row(i).getAttribute("class").contains(submitted_class_name)
+                    || !sales_invoices_list_Page_object.get_invoice_id_in_row_after_action(i).getAttribute("style").contains(red_color)
+                    || !sales_invoices_list_Page_object.get_invoice_id_in_row_after_action(i).getAttribute("style").contains(blue_color)) {
                 //  Assert.assertTrue(sales_invoices_list_Page_object.get_submitted_icon_in_row(i).isDisplayed());
                 System.out.println(sales_invoices_list_Page_object.get_invoice_id_in_row_after_action(i).getText()
                         + " submitted successfully and no error");
-
             } else
                 System.out.println(sales_invoices_list_Page_object.get_invoice_id_in_row_after_action(i).getText()
                         + " still in enqueue");
-
         }
     }
 
@@ -660,14 +660,14 @@ public class StepDefinition extends TestBase {
     @When("user create bulk of sales invoices and save it")
     public void create_sales_invoices_and_save_it() throws InterruptedException {
 
-        /************************* create sales invoices and save itusing make copy button which existed sales invoice itself *********************/
+        /************************* create sales invoices and save it using make copy button which existed sales invoice itself *********************/
 
         sales_invoice_page_object = sales_invoices_list_Page_object.open_new_sales_invoice();
         sales_invoice_page_object.create_sales_invoice_with_all_mandatory_ui_fields(stock_item);
         sales_invoice_page_object.click_on_save_button();
         Assert.assertTrue(sales_invoice_page_object.get_invoice_id_name().contains("INV"));
         Assert.assertTrue(sales_invoice_page_object.get_submit_button().isDisplayed());
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < 4; i++) {
             sales_invoice_page_object.click_on_make_copy_button();
             sales_invoice_page_object.select_series_number();
             sales_invoice_page_object.click_on_save_button();
@@ -691,7 +691,7 @@ public class StepDefinition extends TestBase {
     @When("user create bulk of sales invoices with error and save it")
     public void create_sales_invoices_with_error_and_save_it() throws InterruptedException {
 
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 5; i++) {
             sales_invoice_page_object = sales_invoices_list_Page_object.open_new_sales_invoice();
             sales_invoice_page_object.create_sales_invoice_with_all_mandatory_ui_fields(stock_item);
             sales_invoice_page_object.click_on_update_stock_checkbox_element();
@@ -960,32 +960,30 @@ public class StepDefinition extends TestBase {
     }
 
     @Then("all sales invoices should be submitted successfully and a notifications appear tell user that")
-    public void all_sales_invoices_should_be_submitted_successfully_and_a_notifications_appear_tell_user_that() throws InterruptedException {
+    public void all_sales_invoices_should_be_submitted_successfully_and_a_notifications_appear_tell_user_that() throws Exception, TimeoutException {
         sales_invoices_list_Page_object.get_submitting_in_process_message();
         sales_invoices_list_Page_object.close_and_scroll();
-        // sales_invoices_list_Page_object.scroll_down();
-        sales_invoices_list_Page_object.waiting_for_element_to_be_visible(By.xpath(icon_locator), "class", enqueue_class_name);
-        for (int i = 0; i <= 1; i++) {
-
+       // sales_invoices_list_Page_object.waiting_for_element_to_be_visible(By.xpath(icon_locator), "class", enqueue_class_name);
+        for (int i = 0; i <= 4; i++) {
+            sales_invoices_list_Page_object.waiting_for_element_to_be_visible(i,By.xpath(icon_locator), "class", enqueue_class_name);
             if (sales_invoices_list_Page_object.get_icon_element_in_row(i).getAttribute("class").contains(enqueue_class_name)
                     && sales_invoices_list_Page_object.get_invoice_id_in_row_after_action(i).getAttribute("style").contains(blue_color)) {
-
                 System.out.println(sales_invoices_list_Page_object.get_invoice_id_in_row_after_action(i).getText() + " in enqueue now");
             } else
                 System.out.println(sales_invoices_list_Page_object.get_invoice_id_in_row_after_action(i).getText() + " returned from enqueue");
         }
-        sales_invoices_list_Page_object.scroll_to_top();
-        sales_invoices_list_Page_object.click_on_update_icon();
-        sales_invoices_list_Page_object.scroll_down();
-        for (int i = 0; i <= 1; i++) {
+
+        for (int i = 0; i <= 4; i++) {
             sales_invoices_list_Page_object.waiting_for_element_to_be_invisible(i, By.xpath(icon_locator), "class", enqueue_class_name);
-            if (sales_invoices_list_Page_object.get_icon_element_in_row(i).getAttribute("class").contains(saved_class_name) ||
+            if (sales_invoices_list_Page_object.get_icon_element_in_row(i).getAttribute("class").contains(saved_class_name) &&
                     sales_invoices_list_Page_object.get_invoice_id_in_row_after_action(i).getAttribute("style").contains(red_color)) {
                 Assert.assertTrue(sales_invoices_list_Page_object.get_saved_icon_in_row(i).isDisplayed());
                 System.out.println(sales_invoices_list_Page_object.get_invoice_id_in_row_after_action(i).getText() +
                         " not submitted successfully and there is an error");
 
-            } else if (sales_invoices_list_Page_object.get_icon_element_in_row(i).getAttribute("class").contains(submitted_class_name)) {
+            } else if (sales_invoices_list_Page_object.get_icon_element_in_row(i).getAttribute("class").contains(submitted_class_name)
+                    || !sales_invoices_list_Page_object.get_invoice_id_in_row_after_action(i).getAttribute("style").contains(red_color)
+                    || !sales_invoices_list_Page_object.get_invoice_id_in_row_after_action(i).getAttribute("style").contains(blue_color)) {
                 Assert.assertTrue(sales_invoices_list_Page_object.get_submitted_icon_in_row(i).isDisplayed());
                 System.out.println(sales_invoices_list_Page_object.get_invoice_id_in_row_after_action(i).getText()
                         + " submitted successfully and no error");

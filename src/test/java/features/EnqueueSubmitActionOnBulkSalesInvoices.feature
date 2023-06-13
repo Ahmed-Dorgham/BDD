@@ -3,7 +3,7 @@ Feature:  Submit Action On Bulk Sales Invoices With Enqueue
   Background:
     Given user login successfully and open sales invoice list page
     And user create bulk of sales invoices and save it
-@Skip
+
   Scenario: Bulk Submit N Sales Invoice (without error)
 
     When user select number of sales invoices for enqueue

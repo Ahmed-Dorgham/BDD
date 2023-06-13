@@ -578,7 +578,7 @@ public class SalesInvoicesListPage extends UtilitiesMethods {
             wait.until(ExpectedConditions.attributeToBe(locator, attribute_name, attribute_value));
             return icon_element_in_row;
         } catch (Exception exception) {
-            System.out.println("enqueue icon had been disappeared now ");
+           // System.out.println("enqueue icon for the below invoice had been disappeared now ");
             return icon_element_in_row;
         }
 

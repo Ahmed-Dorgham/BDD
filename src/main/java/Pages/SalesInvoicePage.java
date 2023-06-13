@@ -1,10 +1,7 @@
 package Pages;
 
 import Utilities.UtilitiesMethods;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.locators.RelativeLocator;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
@@ -13,6 +10,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 
 import static java.time.Duration.ofSeconds;
 
@@ -648,11 +646,11 @@ public class SalesInvoicePage extends UtilitiesMethods {
 
     /******************************************************************************************************************************************/
     public WebElement get_error_message_after_enqueue_element() {
-        wait = new WebDriverWait(driver, ofSeconds(300));
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.className(
-                ("alert.alert-danger.bg-job-feed-msg"))));
-        error_message_after_enqueue = driver.findElement(By.className(
-                ("alert.alert-danger.bg-job-feed-msg")));
+        wait = new WebDriverWait(driver, ofSeconds(900));
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
+                ("//div[contains(@class,'alert alert-danger bg-job-feed-msg')]//div"))));
+        error_message_after_enqueue = driver.findElement(By.xpath(
+                ("//div[contains(@class,'alert alert-danger bg-job-feed-msg')]//div")));
         return error_message_after_enqueue;
     }
 
@@ -678,13 +676,11 @@ public class SalesInvoicePage extends UtilitiesMethods {
 
     /************************************************************************************************************************************/
     public WebElement get_alert_notification() {
-        wait = new WebDriverWait(driver, ofSeconds(600));
+        wait = new WebDriverWait(driver, ofSeconds(900));
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath
                 ("//div[@id='alert-container']//a")));
-        //  Thread.sleep(3000);
         alert_notification = driver.findElement(By.xpath
                 ("//div[@id='alert-container']//a"));
-
         return alert_notification;
     }
 
@@ -692,8 +688,10 @@ public class SalesInvoicePage extends UtilitiesMethods {
 
     public WebElement get_received_tag_element() {
         received_tag = driver.findElement(By.xpath
-                ("//div[@id='main_content']//div[@class='badge-bar']//span"));
+                ("//div[@id='main_content']//div[@class='badge-bar in-queue-badge']//span"));
         return received_tag;
+
+
     }
 
     /************************************************************************************************************************************/
@@ -706,18 +704,21 @@ public class SalesInvoicePage extends UtilitiesMethods {
     /************************************************************************************************************************************/
 
     public void waiting_for_received_tag_element_to_be_invisible() {
-        fluent_Wait = new FluentWait(driver)
-                .withTimeout(Duration.ofSeconds(50))
+        wait = new WebDriverWait(driver, ofSeconds(900));
+        /* fluent_Wait = new FluentWait<WebDriver>(driver)
+                .withTimeout(Duration.ofSeconds(600))
                 .pollingEvery(Duration.ofSeconds(10))
-                .ignoring(Exception.class);
-        fluent_Wait.until(ExpectedConditions.not(ExpectedConditions.visibilityOfElementLocated(By.
-                xpath("//div[@id='main_content']//div[@class='badge-bar']//span"))));
-        System.out.println("recieved tag should be disappear");
+                .ignoring(NoSuchElementException.class)
+                .ignoring(TimeoutException.class)
+                .ignoring(StaleElementReferenceException.class);*/
+        wait.until(ExpectedConditions.not(ExpectedConditions.visibilityOfElementLocated(By.
+                xpath("//div[@id='main_content']//div[@class='badge-bar in-queue-badge']//span"))));
+
     }
 
     /***************************************************************************************************************************************/
     public void waiting_for_element_to_be_visible(WebElement element) {
-        wait = new WebDriverWait(driver, ofSeconds(300));
+        wait = new WebDriverWait(driver, ofSeconds(900));
         wait.until(ExpectedConditions.not(ExpectedConditions.invisibilityOf(element)));
     }
 

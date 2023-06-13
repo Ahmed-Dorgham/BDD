@@ -17,6 +17,9 @@ public class TestBase extends AbstractTestNGCucumberTests {
     public void openBrowser() {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--incognito");
+        options.addArguments("disable-infobars");
+        options.addArguments("--start-maximized");
+        options.addArguments("--disable-extensions");
         DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setCapability(ChromeOptions.CAPABILITY, options);
         options.merge(capabilities);
@@ -24,7 +27,7 @@ public class TestBase extends AbstractTestNGCucumberTests {
         driver = new ChromeDriver(options);
     }
 
-     @AfterClass
+ @AfterClass
     public void closeBrowser() {
         driver.quit();
     }

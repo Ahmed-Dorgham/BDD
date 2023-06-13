@@ -34,6 +34,8 @@ public class StepDefinition extends TestBase {
 
     // private String exported_doctype = "صنف";
     // private String exported_doctype = "فاتورة مبيعات";
+    private String date_before_enqueue;
+    private String date_after_enqueue;
     private String first_shown_invoice_name;
     private String first_shown_item_name;
     private LoginPage loginPageObject;
@@ -508,8 +510,8 @@ public class StepDefinition extends TestBase {
         sales_invoices_list_Page_object.get_submitting_in_process_message();
         sales_invoices_list_Page_object.close_and_scroll();
         //sales_invoices_list_Page_object.waiting_for_element_to_be_visible(By.xpath(icon_locator), "class", enqueue_class_name);
-        for (int i = 0; i <=9; i++) {
-            sales_invoices_list_Page_object.waiting_for_element_to_be_visible(i,By.xpath(icon_locator), "class", enqueue_class_name);
+        for (int i = 0; i <= 9; i++) {
+            sales_invoices_list_Page_object.waiting_for_element_to_be_visible(i, By.xpath(icon_locator), "class", enqueue_class_name);
             if (sales_invoices_list_Page_object.get_icon_element_in_row(i).getAttribute("class").contains(enqueue_class_name)
                     && sales_invoices_list_Page_object.get_invoice_id_in_row_after_action(i).getAttribute("style").contains(blue_color)) {
                 System.out.println(sales_invoices_list_Page_object.get_invoice_id_in_row_after_action(i).getText() + " in enqueue now");
@@ -517,7 +519,7 @@ public class StepDefinition extends TestBase {
                 System.out.println(sales_invoices_list_Page_object.get_invoice_id_in_row_after_action(i).getText() + " returned from enqueue");
         }
 
-        for (int i = 0; i <=9; i++) {
+        for (int i = 0; i <= 9; i++) {
 
             sales_invoices_list_Page_object.waiting_for_element_to_be_invisible(i, By.xpath(icon_locator), "class", enqueue_class_name);
             if (sales_invoices_list_Page_object.get_icon_element_in_row(i).getAttribute("class").contains(saved_class_name) &&
@@ -743,6 +745,7 @@ public class StepDefinition extends TestBase {
         sales_invoice_page_object.waiting_for_element_to_be_visible(sales_invoice_page_object.get_alert_notification());
         sales_invoice_page_object.waiting_for_received_tag_element_to_be_invisible();
         Assert.assertTrue(sales_invoice_page_object.get_submitted_icon_element().isDisplayed());
+        System.out.println(sales_invoice_page_object.get_invoice_id_name() + " returned from enqueue and submitted successfully");
     }
 
     @Then("sales invoice not submitted successfully and a notification appear tell user that")
@@ -754,7 +757,8 @@ public class StepDefinition extends TestBase {
         sales_invoice_page_object.waiting_for_element_to_be_visible(sales_invoice_page_object.get_alert_notification());
         sales_invoice_page_object.waiting_for_received_tag_element_to_be_invisible();
         Assert.assertTrue(sales_invoice_page_object.get_error_message_after_enqueue_element().isDisplayed());
-
+        System.out.println(sales_invoice_page_object.get_invoice_id_name() + " returned from enqueue and not submitted successfully and there is an error happen");
+        System.out.println(sales_invoice_page_object.get_error_message_after_enqueue_element().getText());
     }
 
     @Then("some or all sales invoices shouldn't be deleted successfully and others should be deleted successfully")
@@ -830,7 +834,7 @@ public class StepDefinition extends TestBase {
     @Given("user login successfully and open setup page")
     public void login_successfully_and_open_setup_page() {
         driver.get(vm_link);
-        driver.manage().window().maximize();
+       // driver.manage().window().maximize();
         Assert.assertEquals(driver.getCurrentUrl(), vm_link);
         loginPageObject = new LoginPage(driver);
         homePageObject = new HomePage(driver);
@@ -910,6 +914,9 @@ public class StepDefinition extends TestBase {
     public void message_appear_say_recieved_done_then_alert_appear_say_importing_done() {
         Assert.assertTrue(data_import_page_object.get_receiving_message_element().isDisplayed());
         data_import_page_object.close_window();
+        data_import_page_object.scroll_down();
+        date_before_enqueue = data_import_page_object.get_date_in_table().getText();
+        System.out.println("this date before enqueue " + data_import_page_object.get_date_in_table().getText());
         data_import_page_object.waiting_for_element_to_be_visible(data_import_page_object.get_alert_notification());
         data_import_page_object.wait_alert_to_be_invisible_then_scroll();
 
@@ -917,7 +924,9 @@ public class StepDefinition extends TestBase {
 
     @Then("warning message will appear in table indicates that there is an error")
     public void warning_message_will_appear_in_table_indicates_that_there_is_an_error() {
-
+        data_import_page_object.waiting_for_text_not_to_be_in_element
+                (data_import_page_object.get_date_in_table(), date_before_enqueue);
+        System.out.println("this date after enqueue " + data_import_page_object.get_date_in_table().getText());
         Assert.assertEquals("تم استيراد البيانات بنجاح، ولكن بعض الصفوف لم تستورد. لمزيد من التفاصيل انقر هنا.",
                 data_import_page_object.get_message_element_in_table().getText());
         System.out.println(data_import_page_object.get_message_element_in_table().getText());
@@ -927,6 +936,9 @@ public class StepDefinition extends TestBase {
 
     @Given("message will appear in table indicates that importing is successful")
     public void message_will_appear_in_table_indicates_that_importing_is_successful() {
+        data_import_page_object.waiting_for_text_not_to_be_in_element
+                (data_import_page_object.get_date_in_table(), date_before_enqueue);
+        System.out.println("this date after enqueue " + data_import_page_object.get_date_in_table().getText());
         Assert.assertEquals("تم استيراد البيانات بنجاح. لمزيد من التفاصيل انقر هنا.",
                 data_import_page_object.get_message_element_in_table().getText());
         System.out.println(data_import_page_object.get_message_element_in_table().getText());
@@ -963,9 +975,9 @@ public class StepDefinition extends TestBase {
     public void all_sales_invoices_should_be_submitted_successfully_and_a_notifications_appear_tell_user_that() throws Exception, TimeoutException {
         sales_invoices_list_Page_object.get_submitting_in_process_message();
         sales_invoices_list_Page_object.close_and_scroll();
-       // sales_invoices_list_Page_object.waiting_for_element_to_be_visible(By.xpath(icon_locator), "class", enqueue_class_name);
+        // sales_invoices_list_Page_object.waiting_for_element_to_be_visible(By.xpath(icon_locator), "class", enqueue_class_name);
         for (int i = 0; i <= 4; i++) {
-            sales_invoices_list_Page_object.waiting_for_element_to_be_visible(i,By.xpath(icon_locator), "class", enqueue_class_name);
+            sales_invoices_list_Page_object.waiting_for_element_to_be_visible(i, By.xpath(icon_locator), "class", enqueue_class_name);
             if (sales_invoices_list_Page_object.get_icon_element_in_row(i).getAttribute("class").contains(enqueue_class_name)
                     && sales_invoices_list_Page_object.get_invoice_id_in_row_after_action(i).getAttribute("style").contains(blue_color)) {
                 System.out.println(sales_invoices_list_Page_object.get_invoice_id_in_row_after_action(i).getText() + " in enqueue now");

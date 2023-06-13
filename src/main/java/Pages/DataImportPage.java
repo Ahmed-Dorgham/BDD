@@ -1,16 +1,14 @@
 package Pages;
 
 import Utilities.UtilitiesMethods;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.concurrent.TimeoutException;
 
 import static java.time.Duration.ofSeconds;
 
@@ -28,6 +26,7 @@ public class DataImportPage extends UtilitiesMethods {
     private WebElement alert_notification;
     private WebElement first_row_element;
     private WebElement warning_message_element;
+    private WebElement creating_date;
     private WebElement upload_field;
     private WebElement import_button;
     private WebElement wait_until_finish_button;
@@ -141,7 +140,7 @@ public class DataImportPage extends UtilitiesMethods {
         click_on_element(download_with_data_checkbox);
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath
                 ("//p[@id='dit-download']//a")));
-        main_table =driver.findElement(By.xpath
+        main_table = driver.findElement(By.xpath
                 ("//p[@id='dit-download']//a"));
 
 
@@ -193,7 +192,7 @@ public class DataImportPage extends UtilitiesMethods {
     /*************************************************************************************************************************************/
 //<a href="#data-import-tool">تم ( <strong>استيراد</strong> (نوع الوثيقة) (صنف) ) بنجاح</a>
     public WebElement get_alert_notification() {
-        wait = new WebDriverWait(driver, ofSeconds(600));
+        wait = new WebDriverWait(driver, ofSeconds(900));
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath
                 ("//div[@id='alert-container']//a")));
         alert_notification = driver.findElement(By.xpath
@@ -212,6 +211,18 @@ public class DataImportPage extends UtilitiesMethods {
     }
 
     /************************************************************************************************************************************/
+    public WebElement get_date_in_table() {
+        try {
+            wait = new WebDriverWait(driver, ofSeconds(300));
+            creating_date = driver.findElement(By.xpath
+                    ("//table//tbody//tr[1]//td[4]"));
+            return creating_date;
+        } catch (Exception exception) {
+            return creating_date;
+        }
+    }
+
+    /*************************************************************************************************************************************/
     public WebElement get_first_row_in_table_table() {
         wait = new WebDriverWait(driver, ofSeconds(300));
 
@@ -226,24 +237,26 @@ public class DataImportPage extends UtilitiesMethods {
     /************************************************************************************************************************************/
 
     public void waiting_for_element_to_be_visible(WebElement element) {
-        wait = new WebDriverWait(driver, ofSeconds(300));
+        wait = new WebDriverWait(driver, ofSeconds(900));
         wait.until(ExpectedConditions.not(ExpectedConditions.invisibilityOf(element)));
     }
 
     /************************************************************************************************************************************/
-  /*  public void waiting_for_element_to_be_invisible(WebElement element) {
-        wait = new WebDriverWait(driver, ofSeconds(30));
-        wait.until(ExpectedConditions.not(ExpectedConditions.visibilityOf(element)));
+    public void waiting_for_text_not_to_be_in_element(WebElement element, String date) {
+        wait = new WebDriverWait(driver, ofSeconds(900));
+        wait.until(ExpectedConditions.not(ExpectedConditions.textToBePresentInElement(element, date)));
     }
-*/
+
 
     /************************************************************************************************************************************/
 
     public void waiting_for_element_to_be_invisible(WebElement element) {
-        fluent_Wait = new FluentWait(driver)
-                .withTimeout(Duration.ofSeconds(30))
+        fluent_Wait = new FluentWait<>(driver)
+                .withTimeout(Duration.ofSeconds(50))
                 .pollingEvery(Duration.ofSeconds(10))
-                .ignoring(Exception.class);
+                .ignoring(NoSuchElementException.class)
+                .ignoring(TimeoutException.class)
+                .ignoring(StaleElementReferenceException.class);
         fluent_Wait.until(ExpectedConditions.not(ExpectedConditions.visibilityOf(element)));
         System.out.println("alert notification disappear now ");
     }
@@ -259,13 +272,15 @@ public class DataImportPage extends UtilitiesMethods {
 
     public void wait_alert_to_be_invisible_then_scroll() {
         js = (JavascriptExecutor) driver;
-        fluent_Wait = new FluentWait(driver)
-                .withTimeout(Duration.ofSeconds(30))
+        fluent_Wait = new FluentWait<WebDriver>(driver)
+                .withTimeout(Duration.ofSeconds(50))
                 .pollingEvery(Duration.ofSeconds(10))
-                .ignoring(Exception.class);
+                .ignoring(NoSuchElementException.class)
+                .ignoring(TimeoutException.class)
+                .ignoring(StaleElementReferenceException.class);
         fluent_Wait.until(ExpectedConditions.not(ExpectedConditions.visibilityOfElementLocated(By.
                 xpath("//div[@id='alert-container']//a"))));
-        System.out.println("alert notification disappear now ");
+        // System.out.println("alert notification disappear now ");
         js.executeScript("window.scrollTo(0,800)");
     }
 }

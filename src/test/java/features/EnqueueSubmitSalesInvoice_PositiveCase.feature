@@ -1,4 +1,4 @@
-Feature: Submit Sales Invoice (Positive Case) With Enqueue
+Feature: Submit Sales Invoice (Positive Case) (With Enqueue)
 
 
   Background:

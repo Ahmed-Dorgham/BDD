@@ -1,4 +1,4 @@
-Feature:  Submit Action On Bulk Sales Invoices With Enqueue
+Feature:  Submit Action On Bulk Sales Invoices (With Enqueue)
 
   Background:
     Given user login successfully and open sales invoice list page

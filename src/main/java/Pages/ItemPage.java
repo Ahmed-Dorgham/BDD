@@ -46,11 +46,11 @@ public class ItemPage extends UtilitiesMethods {
         item_group_field = driver.findElement(By.xpath
                 ("//div[@id='page-Form/Item']//input[@data-fieldname='item_group']"));
         click_on_element(item_group_field);
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath
+        /*wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath
                 ("(//a[contains(@class,'ui-corner-all')])[1]")));
         selected_group = driver.findElement(By.xpath
                 ("(//a[contains(@class,'ui-corner-all')])[1]"));
-        click_on_element(selected_group);
+        click_on_element(selected_group);*/
         item_code_field = driver.findElement(By.xpath
                 ("//div[@id='page-Form/Item']//input[@data-fieldname='item_code']"));
         enter_data_to_input_field(item_code_field, item_name);

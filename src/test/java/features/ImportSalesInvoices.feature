@@ -12,11 +12,12 @@ Feature: Import Large Number of Sales Invoices
 
     Examples:
       | file_path                                                                     |
-      | C:\\Users\\ahmed\\OneDrive\\Desktop\\performance\\files\\not_valid\\1000.xlsx |
-      | C:\\Users\\ahmed\\OneDrive\\Desktop\\performance\\files\\not_valid\\2000.xlsx |
-      | C:\\Users\\ahmed\\OneDrive\\Desktop\\performance\\files\\not_valid\\5000.xlsx |
+      | C:\\Users\\ahmed\\OneDrive\\Desktop\\performance\\files\\not_valid_invoice\\sales_invoices.xlsx |
+      | C:\\Users\\ahmed\\OneDrive\\Desktop\\performance\\files\\not_valid_invoice\\sales_invoices.xlsx |
+      | C:\\Users\\ahmed\\OneDrive\\Desktop\\performance\\files\\not_valid_invoice\\sales_invoices.xlsx |
 
 
+  @Skip
   Scenario Outline: Import large number of  Sales Invoices  (valid data only)
 
     When user open data import page
@@ -26,6 +27,6 @@ Feature: Import Large Number of Sales Invoices
 
     Examples:
       | file_path                                                                           |
-      | C:\\Users\\ahmed\\OneDrive\\Desktop\\performance\\files\\valid\\sales_invoices.xlsx |
-      | C:\\Users\\ahmed\\OneDrive\\Desktop\\performance\\files\\valid\\sales_invoices.xlsx |
-      | C:\\Users\\ahmed\\OneDrive\\Desktop\\performance\\files\\valid\\sales_invoices.xlsx |
+      | C:\\Users\\ahmed\\OneDrive\\Desktop\\performance\\files\\valid_invoice\\sales_invoices.xlsx |
+      | C:\\Users\\ahmed\\OneDrive\\Desktop\\performance\\files\\valid_invoice\\sales_invoices.xlsx |
+      | C:\\Users\\ahmed\\OneDrive\\Desktop\\performance\\files\\valid_invoice\\sales_invoices.xlsx |

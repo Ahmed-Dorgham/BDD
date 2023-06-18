@@ -46,6 +46,7 @@ public class SalesInvoicesListPage extends UtilitiesMethods {
     private WebElement enqueue_icon_element;
     private WebElement saved_icon_element;
     private WebElement result_list;
+    private WebElement result_liist;
 
     private WebElement cancelled_icon_element;
     private List<WebElement> shown_sales;
@@ -55,7 +56,9 @@ public class SalesInvoicesListPage extends UtilitiesMethods {
     private WebElement icon_element_in_row;
     private WebElement submitted_icon_in_row;
     private WebElement invoice_id_in_row;
+
     private List<WebElement> rows_in_result_list;
+    private List<WebElement> rows_in_result_liist;
 
 
     public SalesInvoicesListPage(WebDriver driver) {
@@ -193,13 +196,19 @@ public class SalesInvoicesListPage extends UtilitiesMethods {
     }
 
     /******************************************************************************************************************************************/
-    public WebElement get_submitted_icon_element() {
-        wait = new WebDriverWait(driver, ofSeconds(300));
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath
-                ("//div[@class='result-list']//i[@class='icon-lock-lock-close-1 docstatus_icon']")));
-        submitted_icon = driver.findElement(By.xpath
-                ("//div[@class='result-list']//i[@class='icon-lock-lock-close-1 docstatus_icon']"));
-        return submitted_icon;
+    public WebElement get_submitted_icon_element(int index) {
+        fluent_Wait = new FluentWait<>(driver)
+                .withTimeout(Duration.ofSeconds(50))
+                .pollingEvery(Duration.ofSeconds(10))
+                .ignoring(NoSuchElementException.class)
+                .ignoring(TimeoutException.class)
+                .ignoring(StaleElementReferenceException.class);
+        result_list = driver.findElement(By.xpath
+                ("//div[@id='page-List/Sales Invoice']//div[@class='result']//div[@class='result-list']"));
+        rows_in_result_list = result_list.findElements(By.className("list-row"));
+        submitted_icon_in_row = rows_in_result_list.get(index).findElement(By.xpath
+                ("//span//i[contains(@class,'icon-lock-lock-close-1')]"));
+        return submitted_icon_in_row;
     }
 
     /******************************************************************************************************************************************/
@@ -211,7 +220,7 @@ public class SalesInvoicesListPage extends UtilitiesMethods {
         shown_sales = sales_invoice_list_element.findElements(By.xpath
                 ("//div[@class='result-list']//div[@class='list-row']//a"));
         first_shown_invoice = shown_sales.get(0);
-        System.out.println("the last created invoice is " + first_shown_invoice.getText());
+        //System.out.println("the last created invoice is " + first_shown_invoice.getText());
         return first_shown_invoice.getText();
     }
 
@@ -479,9 +488,8 @@ public class SalesInvoicesListPage extends UtilitiesMethods {
                     ("//div[@class='doclist-row row']//div//span//i")));
             wait.until(ExpectedConditions.not(ExpectedConditions.attributeToBe(locator, attribute_name, attribute_value)));
             return icon_element_in_row;
-            // throw new Exception("no timeout happen");
         } catch (Exception exception) {
-            System.out.println("this invoice still in enqueue after 5 minutes and may be there is unexpected behaviour happen  ");
+       //     System.out.println("this invoice still in enqueue after 5 minutes and may be there is unexpected behaviour happen  ");
 
             return icon_element_in_row;
         }
@@ -506,15 +514,26 @@ public class SalesInvoicesListPage extends UtilitiesMethods {
 
     /*****************************************************-******************************************************************************************/
     public WebElement get_invoice_id_in_row_after_action(int index) {
-        result_list = driver.findElement(By.xpath
-                ("//div[@id='page-List/Sales Invoice']//div[@class='result']//div[@class='result-list']"));
+
+     try {
+         result_list = driver.findElement(By.xpath
+                 ("//div[@id='page-List/Sales Invoice']//div[@class='result']//div[@class='result-list']"));
+
         rows_in_result_list = result_list.findElements(By.className("list-row"));
         invoice_id_in_row = rows_in_result_list.get(index).findElement(By.partialLinkText("INV"));
 
         return invoice_id_in_row;
+     }
+     catch (Exception exception)
+     {
+         return invoice_id_in_row;
+     }
     }
 
+
     /*****************************************************-******************************************************************************************/
+    /*****************************************************-******************************************************************************************/
+
     public WebElement get_invoice_id_in_row_before_action(int index) {
         wait = new WebDriverWait(driver, ofSeconds(50));
         result_list = driver.findElement(By.xpath
@@ -556,19 +575,18 @@ public class SalesInvoicesListPage extends UtilitiesMethods {
 
     /************************************************************************************************************************************/
     public void waiting_for_element_to_be_visible(By locator, String attribute_name, String attribute_value) throws TimeoutException {
-        wait = new WebDriverWait(driver, ofSeconds(50));
+        wait = new WebDriverWait(driver, ofSeconds(120));
         try {
             wait.until((ExpectedConditions.attributeToBe(locator, attribute_name, attribute_value)));
-            // throw new Exception("no timeout happen");
-            //System.out.println("enqueue icon is visible now");
+
         } catch (Exception exception) {
-            //  System.out.println("enqueue icon had been disappeared now ");
+            System.out.println("enqueue icon for the below invoice had been disappeared now ");
         }
     }
 
     /************************************************************************************************************************************/
     public WebElement waiting_for_element_to_be_visible(int index, By locator, String attribute_name, String attribute_value) {
-        wait = new WebDriverWait(driver, ofSeconds(60));
+        wait = new WebDriverWait(driver, ofSeconds(30));
         try {
             result_list = driver.findElement(By.xpath
                     ("//div[@id='page-List/Sales Invoice']//div[@class='result']//div[@class='result-list']"));

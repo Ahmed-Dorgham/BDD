@@ -4,7 +4,7 @@ import TestCases.TestBase;
 import io.cucumber.testng.CucumberOptions;
 
 @CucumberOptions(
-        features = "src/test/java/features/EnqueueImportItems.feature",
+        features = "src/test/java/features/SubmitSalesInvoice_PositiveCase.feature",
         glue = {"Steps"},
         plugin = {"pretty", "html:target/cucumber-reports/cucumber.html"},
         tags = "not @Skip"

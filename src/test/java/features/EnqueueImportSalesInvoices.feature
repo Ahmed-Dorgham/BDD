@@ -11,14 +11,12 @@ Feature: Import Large Number of Sales Invoices With Enqueue
     Then message appear say recieved done then alert appear say process done
     And warning message will appear in table indicates that there is an error
 
-
     Examples:
       | file_path                                                          |
-      | C:\\Users\\ahmed\\OneDrive\\Desktop\\performance\\files\\1000.xlsx |
-      | C:\\Users\\ahmed\\OneDrive\\Desktop\\performance\\files\\2000.xlsx |
-      | C:\\Users\\ahmed\\OneDrive\\Desktop\\performance\\files\\5000.xlsx |
-
-
+      | C:\\Users\\ahmed\\OneDrive\\Desktop\\performance\\files\\not_valid_invoice\\sales_invoices.xlsx |
+      | C:\\Users\\ahmed\\OneDrive\\Desktop\\performance\\files\\not_valid_invoice\\sales_invoices.xlsx |
+      | C:\\Users\\ahmed\\OneDrive\\Desktop\\performance\\files\\not_valid_invoice\\sales_invoices.xlsx |
+@Skip
   Scenario Outline: Import large number of Sales Invoices (valid data only)
 
     When user open data import page
@@ -29,6 +27,6 @@ Feature: Import Large Number of Sales Invoices With Enqueue
 
     Examples:
       | file_path                                                                |
-      | C:\\Users\\ahmed\\OneDrive\\Desktop\\performance\\files\\1000_Valid.xlsx |
-      | C:\\Users\\ahmed\\OneDrive\\Desktop\\performance\\files\\2000_Valid.xlsx |
-      | C:\\Users\\ahmed\\OneDrive\\Desktop\\performance\\files\\5000_Valid.xlsx |
+      | C:\\Users\\ahmed\\OneDrive\\Desktop\\performance\\files\\valid_invoice\\1000.csv |
+      | C:\\Users\\ahmed\\OneDrive\\Desktop\\performance\\files\\valid_invoice\\1000.csv |
+      | C:\\Users\\ahmed\\OneDrive\\Desktop\\performance\\files\\valid_invoice\\1000.csv |

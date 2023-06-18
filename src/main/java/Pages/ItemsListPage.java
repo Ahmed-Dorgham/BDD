@@ -22,6 +22,10 @@ public class ItemsListPage extends UtilitiesMethods {
     private WebElement navigation_500;
     private List<WebElement> shown_items;
     private WebElement first_shown_item;
+
+    private WebElement result_list;
+    private List<WebElement> rows_in_result_list;
+    private WebElement item_name_in_row;
     private WebElement delete_button;
     private WebElement accept_submit;
     private WebElement items_list_element;
@@ -49,7 +53,23 @@ public class ItemsListPage extends UtilitiesMethods {
     }
 
     /**************************************************************************************************************************************/
-    public void click_on_entire_checkbox_of_sales_invoices(int number) {
+    public WebElement get_item_name_in_row(int index) {
+        try {
+            result_list = driver.findElement(By.xpath
+                    ("//div[@id='page-List/Item']//div[@class='result']//div[@class='result-list']"));
+            rows_in_result_list = result_list.findElements(By.className("list-row"));
+            item_name_in_row = rows_in_result_list.get(index).findElement(By.partialLinkText("item"));
+            return item_name_in_row;
+        }
+        catch (Exception exception)
+        {
+            return item_name_in_row;
+        }
+    }
+
+    /*****************************************************-****************************************************************************/
+
+    public void click_on_entire_checkbox_of_items(int number) {
         js = (JavascriptExecutor) driver;
         wait = new WebDriverWait(driver, ofSeconds(300));
         js.executeScript("window.scrollBy(0,20)");
@@ -68,7 +88,7 @@ public class ItemsListPage extends UtilitiesMethods {
         shown_items = items_list_element.findElements(By.xpath
                 ("//div[@class='result-list']//div[@class='list-row']//a"));
         first_shown_item = shown_items.get(0);
-        System.out.println("the last created item is " + first_shown_item.getText());
+        //System.out.println("the last created item is " + first_shown_item.getText());
         return first_shown_item.getText();
     }
 

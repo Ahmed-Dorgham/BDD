@@ -39,7 +39,6 @@ Feature: Submit Sales Invoice (Positive Case)
     Then sales invoice created successfully with it's unique ID
     And sales invoice appear in general ledger and stock account not appear
 
-
   Scenario: user can submit sales invoice (using save and submit button ) ( POS invoice ) ( without update stock ) ( from delivery note )
 
     When user login successfully with valid credentials ( POS user)

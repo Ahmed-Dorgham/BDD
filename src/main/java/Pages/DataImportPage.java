@@ -34,6 +34,7 @@ public class DataImportPage extends UtilitiesMethods {
     private WebElement search_input;
     private WebElement selected_doctype;
     private WebElement download_with_data_checkbox;
+    private WebElement csv_checkbox;
     private WebElement main_table;
     private WebElement adding_to_waiting_list_button;
 
@@ -95,7 +96,7 @@ public class DataImportPage extends UtilitiesMethods {
 
     /************************************************************************************************************************************/
     public void click_on_wait_until_finish_button() {
-        wait = new WebDriverWait(driver, ofSeconds(30));
+        wait = new WebDriverWait(driver, ofSeconds(600));
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath
                 ("//div[@class='msgprint']//p//button[1]")));
         wait_until_finish_button = driver.findElement(By.xpath
@@ -106,7 +107,7 @@ public class DataImportPage extends UtilitiesMethods {
 
     /***********************************************************************************************************************************/
     public void select_doctype(String doctype) {
-        wait = new WebDriverWait(driver, ofSeconds(30));
+        wait = new WebDriverWait(driver, ofSeconds(300));
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath
                 ("//p//button[@title='إختر']")));
         select_button = driver.findElement(By.xpath
@@ -131,19 +132,19 @@ public class DataImportPage extends UtilitiesMethods {
     public void download_main_table_with_data() {
       /*  wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath
                 ("//div//p[contains(text(),'تحميل قالب لاستيراد الجدول.')]")));*/
+        wait = new WebDriverWait(driver, ofSeconds(300));
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath
                 ("//div//span[contains(text(),'الجدول الرئيس:')]")));
-       /* wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath
-                ("//div//input[@name='dit-with-data']")));*/
         download_with_data_checkbox = driver.findElement(By.xpath
                 ("//div//input[@name='dit-with-data']"));
         click_on_element(download_with_data_checkbox);
+        csv_checkbox = driver.findElement(By.xpath
+                ("//div//input[@name='csv']"));
+        click_on_element(csv_checkbox);
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath
                 ("//p[@id='dit-download']//a")));
         main_table = driver.findElement(By.xpath
                 ("//p[@id='dit-download']//a"));
-
-
         click_on_element(main_table);
     }
 
@@ -192,7 +193,7 @@ public class DataImportPage extends UtilitiesMethods {
     /*************************************************************************************************************************************/
 //<a href="#data-import-tool">تم ( <strong>استيراد</strong> (نوع الوثيقة) (صنف) ) بنجاح</a>
     public WebElement get_alert_notification() {
-        wait = new WebDriverWait(driver, ofSeconds(900));
+        wait = new WebDriverWait(driver, ofSeconds(3600));
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath
                 ("//div[@id='alert-container']//a")));
         alert_notification = driver.findElement(By.xpath
@@ -243,7 +244,7 @@ public class DataImportPage extends UtilitiesMethods {
 
     /************************************************************************************************************************************/
     public void waiting_for_text_not_to_be_in_element(WebElement element, String date) {
-        wait = new WebDriverWait(driver, ofSeconds(900));
+        wait = new WebDriverWait(driver, ofSeconds(1500));
         wait.until(ExpectedConditions.not(ExpectedConditions.textToBePresentInElement(element, date)));
     }
 
@@ -265,7 +266,7 @@ public class DataImportPage extends UtilitiesMethods {
     public void scroll_down() {
 
         js = (JavascriptExecutor) driver;
-        js.executeScript("window.scrollTo(0,700)");
+        js.executeScript("window.scrollTo(0,900)");
     }
 
     /************************************************************************************************************************************/

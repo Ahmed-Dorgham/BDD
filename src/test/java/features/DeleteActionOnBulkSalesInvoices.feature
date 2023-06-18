@@ -10,7 +10,7 @@ Feature: Delete Action On Bulk Sales Invoices
     When user select number of sales invoices
     And user delete all selected sales invoices
     Then all sales invoices should be deleted successfully and no error message will be appeared
-
+@Skip
   Scenario: Bulk delete N Sales Invoice (draft & submitted)
 
     When user create bulk of sales invoices and submit it

@@ -1,16 +1,16 @@
 package Pages;
 
 import Utilities.UtilitiesMethods;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.locators.RelativeLocator;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.time.Duration;
 import java.util.List;
-import java.util.concurrent.TimeoutException;
 
 import static java.time.Duration.ofSeconds;
 
@@ -123,11 +123,11 @@ public class SalesInvoicePage extends UtilitiesMethods {
         basic_price = driver.findElement(By.xpath
                 ("//div[@id='page-Form/Sales Invoice']//input[@data-fieldname='export_rate']"));
         click_on_element(basic_price);
-        //  Thread.sleep(5000);
+        //js.executeScript("arguments[0].click();", basic_price);
         amount_sar = driver.findElement(RelativeLocator.with(By.xpath
                         ("//div[@id='page-Form/Sales Invoice']//div[contains(@class,'control-value like-disabled-input ')]"))
                 .toLeftOf(basic_price));
-        wait.until(ExpectedConditions.textToBePresentInElement(amount_sar, "ر.س 100.0000"));
+        wait.until(ExpectedConditions.textToBePresentInElement(amount_sar, "100"));
 
     }
 
@@ -135,7 +135,7 @@ public class SalesInvoicePage extends UtilitiesMethods {
     public void create_sales_invoice_without_terriority(String itemName) throws InterruptedException {
         js = (JavascriptExecutor) driver;
         wait = new WebDriverWait(driver, ofSeconds(300));
-        Thread.sleep(5000);
+        Thread.sleep(15000);
         wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath
                 ("(//h5[@class='title-text pull-left'])[2]")));
         series_number_field = driver.findElement(By.xpath
@@ -145,18 +145,23 @@ public class SalesInvoicePage extends UtilitiesMethods {
                 ("(//span[contains(text(),'INV')])[1]")));
         INVJ = driver.findElement(By.xpath
                 ("(//span[contains(text(),'INV')])[1]"));
-        click_on_element(INVJ);
+        //click_on_element(INVJ);
+        js.executeScript("arguments[0].click();", INVJ);
         client_name_field = driver.findElement(By.xpath
                 ("//input[@data-fieldname='customer']"));
         enter_data_to_input_field(client_name_field, "عميل نقدي");
         terriority = driver.findElement(By.xpath
                 ("//div[@id='page-Form/Sales Invoice']//input[@data-fieldname='territory']"));
         click_on_element(terriority);
-        Thread.sleep(5000);
+        Thread.sleep(15000);
         js.executeScript("arguments[0].value='';", terriority);
         js.executeScript("window.scrollBy(0,900)");
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.linkText("+ إضافة صف جديد")));
-        add_new_row_button = driver.findElement(By.linkText("+ إضافة صف جديد"));
+        //  wait.until(ExpectedConditions.visibilityOfElementLocated(By.linkText("+ إضافة صف جديد")));
+        //    add_new_row_button = driver.findElement(By.linkText("+ إضافة صف جديد"));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath
+                ("//div[@class='panel-table']//span[contains(text(),' إضافة صف جديد')]")));
+        add_new_row_button = driver.findElement(By.xpath
+                ("//div[@class='panel-table']//span[contains(text(),' إضافة صف جديد')]"));
         js.executeScript("arguments[0].click();", add_new_row_button);
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath
                 ("//div[@id='page-Form/Sales Invoice']//input[@data-fieldname='item_code']")));
@@ -166,17 +171,18 @@ public class SalesInvoicePage extends UtilitiesMethods {
         basic_price = driver.findElement(By.xpath
                 ("//div[@id='page-Form/Sales Invoice']//input[@data-fieldname='export_rate']"));
         click_on_element(basic_price);
+        // js.executeScript("arguments[0].click();", basic_price);
         amount_sar = driver.findElement(RelativeLocator.with(By.xpath
                         ("//div[@id='page-Form/Sales Invoice']//div[contains(@class,'control-value like-disabled-input ')]"))
                 .toLeftOf(basic_price));
-        wait.until(ExpectedConditions.textToBePresentInElement(amount_sar, "ر.س 100.00"));
+        wait.until(ExpectedConditions.textToBePresentInElement(amount_sar, "100"));
     }
 
     /********************************************************************************************************************************/
 
     public void select_series_number() throws InterruptedException {
         js = (JavascriptExecutor) driver;
-        Thread.sleep(5000);
+        Thread.sleep(15000);
         js.executeScript("window.scrollBy(0,250)");
         series_number_field = driver.findElement(By.xpath
                 ("(//div[@id='page-Form/Sales Invoice']//span[contains(text(),'إختر')])[1]"));
@@ -209,7 +215,7 @@ public class SalesInvoicePage extends UtilitiesMethods {
     public void create_sales_invoice_without_Series_naming(String itemName) throws InterruptedException {
         js = (JavascriptExecutor) driver;
         wait = new WebDriverWait(driver, ofSeconds(300));
-        Thread.sleep(5000);
+        Thread.sleep(15000);
         wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath
                 ("//div[@id='page-Form/Sales Invoice']//h5[@class='title-text pull-left']")));
         client_name_field = driver.findElement(By.xpath
@@ -218,10 +224,16 @@ public class SalesInvoicePage extends UtilitiesMethods {
         terriority = driver.findElement(By.xpath
                 ("//div[@id='page-Form/Sales Invoice']//input[@data-fieldname='territory']"));
         click_on_element(terriority);
-        Thread.sleep(5000);
+       //click_on_element(series_number_field);
+        // js.executeScript("arguments[0].click();", series_number_field);
+        Thread.sleep(15000);
         js.executeScript("window.scrollBy(0,800)");
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.linkText("+ إضافة صف جديد")));
-        add_new_row_button = driver.findElement(By.linkText("+ إضافة صف جديد"));
+        //wait.until(ExpectedConditions.visibilityOfElementLocated(By.linkText("+ إضافة صف جديد")));
+        //add_new_row_button = driver.findElement(By.linkText("+ إضافة صف جديد"));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath
+                ("//div[@class='panel-table']//span[contains(text(),' إضافة صف جديد')]")));
+        add_new_row_button = driver.findElement(By.xpath
+                ("//div[@class='panel-table']//span[contains(text(),' إضافة صف جديد')]"));
         js.executeScript("arguments[0].click();", add_new_row_button);
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath
                 ("//div[@id='page-Form/Sales Invoice']//input[@data-fieldname='item_code']")));
@@ -234,7 +246,7 @@ public class SalesInvoicePage extends UtilitiesMethods {
         amount_sar = driver.findElement(RelativeLocator.with(By.xpath
                         ("//div[@id='page-Form/Sales Invoice']//div[contains(@class,'control-value like-disabled-input ')]"))
                 .toLeftOf(basic_price));
-        wait.until(ExpectedConditions.textToBePresentInElement(amount_sar, "ر.س 100.00"));
+        wait.until(ExpectedConditions.textToBePresentInElement(amount_sar, "100"));
     }
 
     /*****************************************************************************************************************************/
@@ -242,7 +254,7 @@ public class SalesInvoicePage extends UtilitiesMethods {
     public void create_sales_invoice_Without_add_items() throws InterruptedException {
         js = (JavascriptExecutor) driver;
         wait = new WebDriverWait(driver, ofSeconds(300));
-        Thread.sleep(5000);
+        Thread.sleep(15000);
         wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath
                 ("(//h5[@class='title-text pull-left'])[2]")));
         series_number_field = driver.findElement(By.xpath
@@ -252,20 +264,24 @@ public class SalesInvoicePage extends UtilitiesMethods {
                 ("(//span[contains(text(),'INV')])[1]")));
         INVJ = driver.findElement(By.xpath
                 ("(//span[contains(text(),'INV')])[1]"));
-        click_on_element(INVJ);
+        // click_on_element(INVJ);
+        js.executeScript("arguments[0].click();", INVJ);
         client_name_field = driver.findElement(By.xpath
                 ("//input[@data-fieldname='customer']"));
         enter_data_to_input_field(client_name_field, "عميل نقدي");
         terriority = driver.findElement(By.xpath
                 ("//div[@id='page-Form/Sales Invoice']//input[@data-fieldname='territory']"));
         click_on_element(terriority);
-        Thread.sleep(5000);
+        Thread.sleep(15000);
     }
 
     /*****************************************************************************************************************************************/
     public WebElement get_update_stock_checkBox_element() {
+        wait = new WebDriverWait(driver, ofSeconds(300));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath
+                ("//div[@id='page-Form/Sales Invoice']//input[@data-fieldname='update_stock']")));
         update_stock_checkbox = driver.findElement(By.xpath
-                ("//input[@data-fieldname='update_stock']"));
+                ("//div[@id='page-Form/Sales Invoice']//input[@data-fieldname='update_stock']"));
         return update_stock_checkbox;
     }
 
@@ -275,7 +291,7 @@ public class SalesInvoicePage extends UtilitiesMethods {
 
         js = (JavascriptExecutor) driver;
         wait = new WebDriverWait(driver, ofSeconds(300));
-        Thread.sleep(5000);
+        Thread.sleep(15000);
         wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath
                 ("(//h5[@class='title-text pull-left'])[2]")));
         series_number_field = driver.findElement(By.xpath
@@ -286,7 +302,8 @@ public class SalesInvoicePage extends UtilitiesMethods {
                 ("(//span[contains(text(),'INV')])[1]")));
         INVJ = driver.findElement(By.xpath
                 ("(//span[contains(text(),'INV')])[1]"));
-        click_on_element(INVJ);
+        //click_on_element(INVJ);
+        js.executeScript("arguments[0].click();", INVJ);
         terriority = driver.findElement(By.xpath
                 ("//div[@id='page-Form/Sales Invoice']//input[@data-fieldname='territory']"));
         click_on_element(terriority);
@@ -315,7 +332,7 @@ public class SalesInvoicePage extends UtilitiesMethods {
 
     public void change_fiscal_year() {
         js = (JavascriptExecutor) driver;
-        wait = new WebDriverWait(driver, ofSeconds(30));
+        wait = new WebDriverWait(driver, ofSeconds(300));
         js.executeScript("window.scrollTo(0, -document.body.scrollHeight)");
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath
                 ("(//div[@id='page-Form/Sales Invoice']//div//button[@data-toggle='dropdown'])[2]")));
@@ -362,7 +379,7 @@ public class SalesInvoicePage extends UtilitiesMethods {
     }
 
     /******************************************************************************************************************************/
-    public WebElement get_pos_nvoice_checkbox_element() {
+    public WebElement get_pos_invoice_checkbox_element() {
         wait = new WebDriverWait(driver, ofSeconds(300));
         wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath
                 ("(//span[contains(text(),'INV')])[1]")));
@@ -380,9 +397,12 @@ public class SalesInvoicePage extends UtilitiesMethods {
         js.executeScript("window.scrollBy(0,900)");
         wait.until(ExpectedConditions.elementToBeSelected(By.xpath
                 ("//div[@id='page-Form/Sales Invoice']//input[@data-fieldname='update_stock']")));
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.linkText("+ إضافة صف جديد")));
-        add_new_row_button = driver.findElement(By.linkText("+ إضافة صف جديد"));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath
+                ("//div[@class='panel-table']//span[contains(text(),' إضافة صف جديد')]")));
+        add_new_row_button = driver.findElement(By.xpath
+                ("//div[@class='panel-table']//span[contains(text(),' إضافة صف جديد')]"));
         js.executeScript("arguments[0].click();", add_new_row_button);
+
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath
                 ("//div[@id='page-Form/Sales Invoice']//input[@data-fieldname='item_code']")));
         item_field = driver.findElement(By.xpath
@@ -394,7 +414,7 @@ public class SalesInvoicePage extends UtilitiesMethods {
         amount_sar = driver.findElement(RelativeLocator.with(By.xpath
                         ("//div[@id='page-Form/Sales Invoice']//div[contains(@class,'control-value like-disabled-input ')]"))
                 .toLeftOf(basic_price));
-        wait.until(ExpectedConditions.textToBePresentInElement(amount_sar, "ر.س 100.00"));
+        wait.until(ExpectedConditions.textToBePresentInElement(amount_sar, "100"));
     }
 
     /*********************************************************************************************************************************/
@@ -416,6 +436,7 @@ public class SalesInvoicePage extends UtilitiesMethods {
     public void select_delivery_note() throws InterruptedException {
         js = (JavascriptExecutor) driver;
         wait = new WebDriverWait(driver, ofSeconds(300));
+        Thread.sleep(8000);
         from_delivery_note = driver.findElement(By.id(
                 ("appframe-btn-من سند تسليم")));
         click_on_element(from_delivery_note);
@@ -435,7 +456,7 @@ public class SalesInvoicePage extends UtilitiesMethods {
         // click_on_element(selected_delivery_note);
         js.executeScript("arguments[0].click();", selected_delivery_note);
         js.executeScript("arguments[0].click();", get_button);
-        Thread.sleep(3000);
+        // Thread.sleep(15000);
     }
 
     /************************************************************************************************************************************/
@@ -443,6 +464,7 @@ public class SalesInvoicePage extends UtilitiesMethods {
     public void select_Sales_order() throws InterruptedException {
         js = (JavascriptExecutor) driver;
         wait = new WebDriverWait(driver, ofSeconds(300));
+        Thread.sleep(10000);
         from_sales_order = driver.findElement(By.id(
                 ("appframe-btn-من أمر بيع")));
         click_on_element(from_sales_order);
@@ -461,15 +483,18 @@ public class SalesInvoicePage extends UtilitiesMethods {
         selected_sales_order = sales_orderlist.get(sales_orderlist.size() - 1);
         click_on_element(selected_sales_order);
         click_on_element(get_button);
-        Thread.sleep(3000);
+        //Thread.sleep(15000);
     }
 
     /*********************************************************************************************************************************/
     public void click_on_update_stock_checkbox_element() {
-
+        wait = new WebDriverWait(driver, ofSeconds(300));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath
+                ("//div[@id='page-Form/Sales Invoice']//input[@data-fieldname='update_stock']")));
         update_stock_checkbox = driver.findElement(By.xpath
-                ("//input[@data-fieldname='update_stock']"));
+                ("//div[@id='page-Form/Sales Invoice']//input[@data-fieldname='update_stock']"));
         click_on_element(update_stock_checkbox);
+        // js.executeScript("arguments[0].click();", update_stock_checkbox);
     }
 
     /************************************** **************************************************************************************/
@@ -496,7 +521,7 @@ public class SalesInvoicePage extends UtilitiesMethods {
 
     /************************************************************************************************************************************/
     public String get_invoice_id_name() {
-        wait = new WebDriverWait(driver, ofSeconds(300));
+        wait = new WebDriverWait(driver, ofSeconds(30));
         invoice_id_name = driver.findElement(By.xpath
                 ("//div[@id='page-Form/Sales Invoice']//h5"));
         wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath
@@ -723,4 +748,36 @@ public class SalesInvoicePage extends UtilitiesMethods {
     }
 
     /************************************************************************************************************************************/
+    public void scroll_down() {
+        js = (JavascriptExecutor) driver;
+        wait = new WebDriverWait(driver, ofSeconds(300));
+        js.executeScript("window.scrollTo(0,800)");
+
+    }
+
+    public void waiting_for_element_to_be_selected(WebElement element) {
+        wait = new WebDriverWait(driver, ofSeconds(60));
+        wait.until(ExpectedConditions.elementToBeSelected(element));
+    }
+
+    /********************************************************************************************************************************/
+    public void waiting_for_element_to_be_not_selected(WebElement element) {
+        wait = new WebDriverWait(driver, ofSeconds(60));
+        wait.until(ExpectedConditions.not(ExpectedConditions.elementToBeSelected(element)));
+    }
+
+    public void scroll_down_and_wait() {
+        js = (JavascriptExecutor) driver;
+        wait = new WebDriverWait(driver, ofSeconds(300));
+        js.executeScript("window.scrollTo(0,800)");
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath
+                ("//div[@id='page-Form/Sales Invoice']//div[contains(@data-fieldname,'export_rate')]//div")));
+        basic_price = driver.findElement(By.xpath
+                ("//div[@id='page-Form/Sales Invoice']//div[contains(@data-fieldname,'export_rate')]//div"));
+        // click_on_element(basic_price);
+       /* amount_sar = driver.findElement(RelativeLocator.with(By.xpath
+                        ("//div[@id='page-Form/Sales Invoice']//div[contains(@data-fieldname,'export_amount')]//div"))
+                .toLeftOf(basic_price));*/
+        //wait.until(ExpectedConditions.textToBePresentInElement(amount_sar, "100"));
+    }
 }

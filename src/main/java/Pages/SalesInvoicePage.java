@@ -35,6 +35,7 @@ public class SalesInvoicePage extends UtilitiesMethods {
     private WebElement invoice_id_name;
     private WebElement accept_submit;
     private WebElement basic_price;
+    private WebElement load_data;
     private WebElement amount_sar;
     private WebElement amount_field;
     private WebElement terriority;
@@ -46,6 +47,8 @@ public class SalesInvoicePage extends UtilitiesMethods {
     private WebElement sales_list_icon;
     private WebElement submitted_icon;
     private WebElement received_tag;
+    private WebElement total_amount;
+    private WebElement client_name;
     private WebElement received_message;
     private WebElement stock_validation_message;
     private WebElement error_validation_message;
@@ -224,7 +227,7 @@ public class SalesInvoicePage extends UtilitiesMethods {
         terriority = driver.findElement(By.xpath
                 ("//div[@id='page-Form/Sales Invoice']//input[@data-fieldname='territory']"));
         click_on_element(terriority);
-       //click_on_element(series_number_field);
+        //click_on_element(series_number_field);
         // js.executeScript("arguments[0].click();", series_number_field);
         Thread.sleep(15000);
         js.executeScript("window.scrollBy(0,800)");
@@ -715,8 +718,22 @@ public class SalesInvoicePage extends UtilitiesMethods {
         received_tag = driver.findElement(By.xpath
                 ("//div[@id='main_content']//div[@class='badge-bar in-queue-badge']//span"));
         return received_tag;
+    }
 
+    /************************************************************************************************************************************/
+    public WebElement client_name() {
+        client_name = driver.findElement(By.xpath
+                ("(//div[@id='tab_1']//div[@class='control-value like-disabled-input']//a)[1]"));
+       // System.out.println("the client name for this  sales invoice is " + client_name.getText());
+        return client_name;
+    }
 
+    /************************************************************************************************************************************/
+    public WebElement total_amount() {
+        total_amount = driver.findElement(By.xpath
+                ("(//div[@id='tab_1']//div[@class='control-value']//div)[4]"));
+       // System.out.println("the total amount of sales invoice is " + total_amount.getText());
+        return total_amount;
     }
 
     /************************************************************************************************************************************/
@@ -750,9 +767,14 @@ public class SalesInvoicePage extends UtilitiesMethods {
     /************************************************************************************************************************************/
     public void scroll_down() {
         js = (JavascriptExecutor) driver;
-        wait = new WebDriverWait(driver, ofSeconds(300));
-        js.executeScript("window.scrollTo(0,800)");
 
+        js.executeScript("window.scrollTo(0,800)");
+    }
+
+    public void scroll_up() {
+        js = (JavascriptExecutor) driver;
+
+        js.executeScript("window.scrollTo(0,0)");
     }
 
     public void waiting_for_element_to_be_selected(WebElement element) {
@@ -780,4 +802,5 @@ public class SalesInvoicePage extends UtilitiesMethods {
                 .toLeftOf(basic_price));*/
         //wait.until(ExpectedConditions.textToBePresentInElement(amount_sar, "100"));
     }
+
 }

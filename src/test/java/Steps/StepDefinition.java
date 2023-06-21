@@ -12,10 +12,13 @@ import java.util.concurrent.TimeoutException;
 
 public class StepDefinition extends TestBase {
     String invoice_name_after_submitting;
+    String total_amount;
+    String client_name;
+    String invoice_id;
     //String file_path = "C:\\Users\\ahmed\\OneDrive\\Desktop\\Item (1).xlsx";
     //  private String vm_link = "https://engineering-dorgham.dafater.biz/index.html";
     private String vm_link = "https://temp-release4-0.dafater.biz/index.html";
-    // private String vm_link = "https://temp-release4-0-1.dafater.biz/index.html";
+    // private String vm_link = "https://temp-t88989.dafater.biz/index.html";
     private String not_pos_user = "not@gmail.com";
     private String password = "123456";
     private String pos_user = "ahmed@gmail.com";
@@ -32,7 +35,6 @@ public class StepDefinition extends TestBase {
     private String submitted_class_name = "icon-lock-lock-close-1 docstatus_icon";
     private String icon_locator =
             "//div[@id='page-List/Sales Invoice']//div[@class='result']//div[@class='result-list']//div[@class='list-row']//span//i";
-
     // private String exported_doctype = "صنف";
     // private String exported_doctype = "فاتورة مبيعات";
     private String date_before_enqueue;
@@ -135,20 +137,60 @@ public class StepDefinition extends TestBase {
         String invoiceNameAfterSubmitting = sales_invoice_page_object.get_invoice_id_name();
         Assert.assertTrue(invoiceNameAfterSubmitting.contains("INV"));
         System.out.println("the ID of submitted sales invoice is  " + sales_invoice_page_object.get_invoice_id_name());
+        sales_invoice_page_object.scroll_down();
+        total_amount = sales_invoice_page_object.total_amount().getText();
+        sales_invoice_page_object.scroll_up();
+        client_name = sales_invoice_page_object.client_name().getText();
+        invoice_id = sales_invoice_page_object.get_invoice_id_name();
     }
 
     @Then("sales invoice appear in general ledger and stock account not appear")
     public void sales_invoice_appear_in_general_ledger_and_stock_account_not_appear() throws InterruptedException {
         generalLedgerPageObject = sales_invoice_page_object.open_general_ledger();
-        // String stockAccountName = generalLedgerPageObject.verify_Sales_invoice_appeared_in_genera_ledger().getText();
-        // Assert.assertFalse(stockAccountName.contains(" حساب المخزون"));
+        generalLedgerPageObject.click_on_load_data();
+        /******* assert that the stock account is appeared in general ledger report when creating sales invoice with update stock *******/
+
+        if (generalLedgerPageObject.get_report().getText().contains(" حساب المخزون")) {
+            for (int i = 0; i < generalLedgerPageObject.rows_number() - 1; i++) {
+                if (generalLedgerPageObject.account_in_general_ledger(i).getText().contains(" حساب المخزون")
+                        && generalLedgerPageObject.voucher_number_in_general_ledger(i).getText().contains(invoice_id)) {
+                    System.out.println("this sales invoice with update stock and appeared in general ledger successfully with correct data ");
+                }
+            }
+        } else {
+            System.out.println("this invoice without update stock");
+        }
+        /******* assert that total amount of sales invoice is appeared correctly as debit on client in general ledger report *******/
+        for (int i = 0; i < generalLedgerPageObject.rows_number() - 1; i++) {
+            if (generalLedgerPageObject.debit_in_general_ledger(i).getText().contains(total_amount) &&
+                    generalLedgerPageObject.account_in_general_ledger(i).getText().contains(client_name)
+                    && generalLedgerPageObject.voucher_number_in_general_ledger(i).getText().contains(invoice_id)) {
+                System.out.println("the debit on client is the same as the total amount of sales invoice and this is correct");
+            }
+        }
     }
 
     @Then("sales invoice appear in general ledger and stock account appear")
     public void sales_invoice_and_stock_account_appear_in_general_ledger() throws InterruptedException {
         generalLedgerPageObject = sales_invoice_page_object.open_general_ledger();
-        // String stockAccountName = generalLedgerPageObject.verify_Sales_invoice_appeared_in_genera_ledger().getText();
-        //  Assert.assertTrue(stockAccountName.contains(" حساب المخزون"));
+        generalLedgerPageObject.click_on_load_data();
+        /******* assert that the stock account is appeared in general ledger report when creating sales invoice with update stock *******/
+        for (int i = 0; i < generalLedgerPageObject.rows_number() - 1; i++) {
+            if (generalLedgerPageObject.account_in_general_ledger(i).getText().contains(" حساب المخزون")
+                    && generalLedgerPageObject.voucher_number_in_general_ledger(i).getText().contains(invoice_id)) {
+                System.out.println("this sales invoice with update stock and appeared in general ledger successfully with correct data ");
+            }
+
+        }
+
+        /******* assert that total amount of sales invoice is appeared correctly as debit on client in general ledger report *******/
+        for (int i = 0; i < generalLedgerPageObject.rows_number() - 1; i++) {
+            if (generalLedgerPageObject.debit_in_general_ledger(i).getText().contains(total_amount) &&
+                    generalLedgerPageObject.account_in_general_ledger(i).getText().contains(client_name)
+                    && generalLedgerPageObject.voucher_number_in_general_ledger(i).getText().contains(invoice_id)) {
+                System.out.println("the debit on client is the same as the total amount of sales invoice and this is correct");
+            }
+        }
     }
 
     @Then("sales invoice not created successfully and validation message appear \\(Negative stock error)")
@@ -244,7 +286,7 @@ public class StepDefinition extends TestBase {
 
         sales_invoice_page_object.click_on_update_stock_checkbox_element();
         //sales_invoice_page_object.waiting_for_element_to_be_not_selected(sales_invoice_page_object.get_update_stock_checkBox_element());
-       // Assert.assertFalse(sales_invoice_page_object.get_update_stock_checkBox_element().isSelected());
+        // Assert.assertFalse(sales_invoice_page_object.get_update_stock_checkBox_element().isSelected());
         sales_invoice_page_object.click_on_save_button();
     }
 

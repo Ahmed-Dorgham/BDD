@@ -44,6 +44,7 @@ public class SalesInvoicePage extends UtilitiesMethods {
     private WebElement date_field;
     private WebElement client_name_field;
     private WebElement show_account_button;
+    private WebElement make_payment_entry;
     private WebElement sales_list_icon;
     private WebElement submitted_icon;
     private WebElement received_tag;
@@ -72,6 +73,7 @@ public class SalesInvoicePage extends UtilitiesMethods {
     private WebElement backend_validation_message;
     private WebElement INVJ;
     //private WebElement INV;
+
 
     public SalesInvoicePage(WebDriver driver) {
         this.driver = driver;
@@ -132,6 +134,21 @@ public class SalesInvoicePage extends UtilitiesMethods {
                 .toLeftOf(basic_price));
         wait.until(ExpectedConditions.textToBePresentInElement(amount_sar, "100"));
 
+    }
+
+    /****************************************************************************************************************************-*/
+
+    public void enter_series_numbering() throws InterruptedException {
+        js = (JavascriptExecutor) driver;
+        wait = new WebDriverWait(driver, ofSeconds(300));
+        Thread.sleep(15000);
+        series_number_field = driver.findElement(By.xpath
+                ("(//span[contains(text(),'إختر')])[1]"));
+        js.executeScript("arguments[0].click();", series_number_field);
+        INVJ = driver.findElement(By.xpath
+                ("(//span[contains(text(),'INV')])[1]"));
+        //click_on_element(INVJ);
+        js.executeScript("arguments[0].click();", INVJ);
     }
 
     /****************************************************************************************************************************-*/
@@ -439,7 +456,7 @@ public class SalesInvoicePage extends UtilitiesMethods {
     public void select_delivery_note() throws InterruptedException {
         js = (JavascriptExecutor) driver;
         wait = new WebDriverWait(driver, ofSeconds(300));
-        Thread.sleep(8000);
+        //Thread.sleep(8000);
         from_delivery_note = driver.findElement(By.id(
                 ("appframe-btn-من سند تسليم")));
         click_on_element(from_delivery_note);
@@ -459,7 +476,7 @@ public class SalesInvoicePage extends UtilitiesMethods {
         // click_on_element(selected_delivery_note);
         js.executeScript("arguments[0].click();", selected_delivery_note);
         js.executeScript("arguments[0].click();", get_button);
-        // Thread.sleep(15000);
+         Thread.sleep(10000);
     }
 
     /************************************************************************************************************************************/
@@ -467,7 +484,7 @@ public class SalesInvoicePage extends UtilitiesMethods {
     public void select_Sales_order() throws InterruptedException {
         js = (JavascriptExecutor) driver;
         wait = new WebDriverWait(driver, ofSeconds(300));
-        Thread.sleep(10000);
+        //Thread.sleep(10000);
         from_sales_order = driver.findElement(By.id(
                 ("appframe-btn-من أمر بيع")));
         click_on_element(from_sales_order);
@@ -486,7 +503,7 @@ public class SalesInvoicePage extends UtilitiesMethods {
         selected_sales_order = sales_orderlist.get(sales_orderlist.size() - 1);
         click_on_element(selected_sales_order);
         click_on_element(get_button);
-        //Thread.sleep(15000);
+        Thread.sleep(10000);
     }
 
     /*********************************************************************************************************************************/
@@ -650,6 +667,17 @@ public class SalesInvoicePage extends UtilitiesMethods {
                 "appframe-btn-عرض حساب فرعي"));
         click_on_element(show_account_button);
         return new GeneralLedgerPage(driver);
+    }
+
+    /*************************************************************************************************************************************************/
+    public ReceiptVoucherPage make_receipt_voucher() {
+        wait = new WebDriverWait(driver, ofSeconds(300));
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.id(
+                "appframe-btn-عمل قيد دفعة ")));
+        make_payment_entry = driver.findElement(By.id(
+                "appframe-btn-عمل قيد دفعة "));
+        click_on_element(make_payment_entry);
+        return new ReceiptVoucherPage(driver);
     }
 
     /*************************************************************************************************************************************************/

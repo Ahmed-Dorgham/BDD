@@ -15,10 +15,12 @@ import static java.time.Duration.ofSeconds;
 
 public class SalesInvoicesListPage extends UtilitiesMethods {
     private WebDriver driver;
+
+    public SalesInvoicesListPage(WebDriver driver) {
+        this.driver = driver;
+    }
     private JavascriptExecutor js;
     private WebDriverWait wait;
-    // private Wait<WebDriver> fluent_Wait;
-    // private Wait fluent_Wait;
     private Wait<WebDriver> fluent_Wait;
     private WebElement sales_invoices_list_header;
     private WebElement error_validation_message;
@@ -46,9 +48,6 @@ public class SalesInvoicesListPage extends UtilitiesMethods {
     private WebElement enqueue_icon_element;
     private WebElement saved_icon_element;
     private WebElement result_list;
-    private WebElement result_liist;
-
-    private WebElement cancelled_icon_element;
     private List<WebElement> shown_sales;
     private List<WebElement> saved_sales;
     private List<WebElement> submitted_sales;
@@ -58,18 +57,14 @@ public class SalesInvoicesListPage extends UtilitiesMethods {
     private WebElement invoice_id_in_row;
 
     private List<WebElement> rows_in_result_list;
-    private List<WebElement> rows_in_result_liist;
 
 
-    public SalesInvoicesListPage(WebDriver driver) {
-        this.driver = driver;
-    }
 
     /***********************************************************************************************************************/
     public SalesInvoicePage open_new_sales_invoice() {
         js = (JavascriptExecutor) driver;
         wait = new WebDriverWait(driver, ofSeconds(300));
-        wait.until(ExpectedConditions.elementToBeClickable(By.xpath
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath
                 ("//button[@id='appframe-btn-جديد']")));
         new_button = driver.findElement(By.id("appframe-btn-جديد"));
         js.executeScript("arguments[0].click();", new_button);
@@ -98,6 +93,7 @@ public class SalesInvoicesListPage extends UtilitiesMethods {
                 ("(//div[@class='result-list']//input[@type='checkbox'])[1]")));
         id_checkboxes = driver.findElements(By.xpath
                 ("(//div[@class='result-list']//input[@type='checkbox'])"));
+
         js.executeScript("arguments[0].click();", id_checkboxes.get(number));
     }
 
@@ -426,7 +422,7 @@ public class SalesInvoicesListPage extends UtilitiesMethods {
     /************************************************************************************************************************************/
     public WebElement get_saved_icon_in_row(int index) {
         fluent_Wait = new FluentWait<>(driver)
-                .withTimeout(Duration.ofSeconds(50))
+                .withTimeout(Duration.ofSeconds(90))
                 .pollingEvery(Duration.ofSeconds(10))
                 .ignoring(NoSuchElementException.class)
                 .ignoring(TimeoutException.class)
@@ -460,7 +456,7 @@ public class SalesInvoicesListPage extends UtilitiesMethods {
 
     /************************************************************************************************************************************/
     public WebElement get_icon_element_in_row(int index) {
-        wait = new WebDriverWait(driver, ofSeconds(30));
+        wait = new WebDriverWait(driver, ofSeconds(300));
         fluent_Wait = new FluentWait<>(driver)
                 .withTimeout(Duration.ofSeconds(50))
                 .pollingEvery(Duration.ofSeconds(10))
@@ -529,13 +525,10 @@ public class SalesInvoicesListPage extends UtilitiesMethods {
          return invoice_id_in_row;
      }
     }
-
-
-    /*****************************************************-******************************************************************************************/
     /*****************************************************-******************************************************************************************/
 
     public WebElement get_invoice_id_in_row_before_action(int index) {
-        wait = new WebDriverWait(driver, ofSeconds(50));
+        wait = new WebDriverWait(driver, ofSeconds(300));
         result_list = driver.findElement(By.xpath
                 ("//div[@id='page-List/Sales Invoice']//div[@class='result']//div[@class='result-list']"));
         rows_in_result_list = result_list.findElements(By.className("list-row"));

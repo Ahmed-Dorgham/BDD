@@ -6,6 +6,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.By;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 
 import java.time.Duration;
@@ -41,7 +42,11 @@ public class SubmitSalesInvoice_PositiveCase extends TestBase {
     // private String exported_doctype = "فاتورة مبيعات";
     private String date_before_enqueue;
     private String total_debit_before_invoice;
+    private String total_incomes_before_invoice;
+    private String total_profit_loss_before_invoice;
     private String total_debit_after_invoice;
+    private String total_incomes_after_invoice;
+    private String total_profit_loss_after_invoice;
     private String first_shown_invoice_name;
     private String first_shown_item_name;
     private LoginPage loginPageObject;
@@ -52,6 +57,7 @@ public class SubmitSalesInvoice_PositiveCase extends TestBase {
     private GeneralLedgerPage general_ledger_page_object;
     private ReportsPage reports_page_object;
     private AccountStatementReportPage account_statement_report_page_object;
+    private FinancialStatementsReportPage financial_statements_report_page_object;
     private SalesInvoicePage sales_invoice_page_object;
     private SetupPage setup_page_object;
     private DataImportPage data_import_page_object;
@@ -116,7 +122,34 @@ public class SubmitSalesInvoice_PositiveCase extends TestBase {
         homePageObject.clear_cash();
         homePageObject.close_window();
     }
+    @When("user open financial statements report and get current data")
+    public void user_open_financial_statements_report_and_get_current_data() throws InterruptedException {
+       //homePageObject.close_window();
+        reports_page_object = homePageObject.open_reports_page();
+        financial_statements_report_page_object = reports_page_object.open_financial_statements_report();
+        financial_statements_report_page_object.clear_cash();
+        financial_statements_report_page_object.waiting_for_element_to_be_visible(By.xpath
+                ("//button[@id='appframe-btn-طباعة']"));
+        financial_statements_report_page_object.enter_all_data_using_filters();
+        financial_statements_report_page_object.click_on_create_button();
+        total_incomes_before_invoice=financial_statements_report_page_object.incomes_in_financial_statements_report();
+        total_profit_loss_before_invoice= financial_statements_report_page_object.profit_loss_in_financial_statements_report();
+        System.out.println("the total incomes before creating new invoice is  " + total_incomes_before_invoice);
+        System.out.println("the total profit & loss before creating new invoice is  " + total_profit_loss_before_invoice);
+        homePageObject = financial_statements_report_page_object.return_to_homepage();
+        homePageObject.clear_cash();
+        homePageObject.close_window();
 
+
+
+
+    /*    account_statement_report_page_object.click_on_load_data_before(client_namee);
+        total_debit_before_invoice = account_statement_report_page_object.total_debit_in_account_statement_report();
+        System.out.println("the total debit on " + client_namee + " before creating new invoice is  " + total_debit_before_invoice);
+        homePageObject = account_statement_report_page_object.return_to_homepage();
+        homePageObject.clear_cash();
+        homePageObject.close_window();*/
+    }
     @When("user enter mandatory fields in sales invoice \\( client - item - series naming )")
     public void enter_mandatory_fields_in_sales_invoice() throws InterruptedException {
         sales_invoice_page_object.create_sales_invoice_with_all_mandatory_ui_fields(stock_item);
@@ -243,6 +276,31 @@ public class SubmitSalesInvoice_PositiveCase extends TestBase {
 
         }
     }
+    @Then("created sales invoice affect on financial statements report")
+    public void sales_invoice_affect_on_financial_statements_report() throws InterruptedException {
+        homePageObject = financial_statements_report_page_object.return_to_homepage();
+        homePageObject.clear_cash();
+        homePageObject.close_window();
+        reports_page_object = homePageObject.open_reports_page();
+        financial_statements_report_page_object = reports_page_object.open_financial_statements_report();
+        financial_statements_report_page_object.clear_cash();
+        financial_statements_report_page_object.waiting_for_element_to_be_visible(By.xpath
+                ("//button[@id='appframe-btn-طباعة']"));
+        financial_statements_report_page_object.enter_all_data_using_filters();
+        financial_statements_report_page_object.click_on_create_button();
+        total_incomes_after_invoice=financial_statements_report_page_object.incomes_in_financial_statements_report();
+        total_profit_loss_after_invoice= financial_statements_report_page_object.profit_loss_in_financial_statements_report();
+        System.out.println("the total incomes after creating new invoice is  " + total_incomes_after_invoice);
+        System.out.println("the total profit & loss after creating new invoice is  " + total_profit_loss_after_invoice);
+
+
+            if (!financial_statements_report_page_object.incomes_in_financial_statements_report().contains(total_incomes_before_invoice)) {
+                System.out.println("the sales invoice affect on the financial statememnts report" );
+
+            } else {
+                System.out.println("there is something wrong!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            }
+        }
 
     @Then("sales invoice appear in general ledger and stock account appear")
     public void sales_invoice_and_stock_account_appear_in_general_ledger() throws InterruptedException {

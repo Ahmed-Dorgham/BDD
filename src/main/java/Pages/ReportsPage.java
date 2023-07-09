@@ -18,6 +18,7 @@ public class ReportsPage extends UtilitiesMethods {
     private JavascriptExecutor js;
     private WebDriverWait wait;
     private WebElement account_statement_element;
+    private WebElement financial_statements_element;
     private WebElement yes_button;
     private WebElement clear_cash_element;
     private WebElement settingIcon;
@@ -29,6 +30,14 @@ public class ReportsPage extends UtilitiesMethods {
         account_statement_element = driver.findElement(By.id("report-account-statement"));
         click_on_element(account_statement_element);
         return new AccountStatementReportPage(driver);
+    }
+    public FinancialStatementsReportPage open_financial_statements_report() {
+        js = (JavascriptExecutor) driver;
+        wait = new WebDriverWait(driver, ofSeconds(300));
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("page-report-financial-statements")));
+        financial_statements_element = driver.findElement(By.id("page-report-financial-statements"));
+        click_on_element(financial_statements_element);
+        return new FinancialStatementsReportPage(driver);
     }
     public void clear_cash() {
         js = (JavascriptExecutor) driver;

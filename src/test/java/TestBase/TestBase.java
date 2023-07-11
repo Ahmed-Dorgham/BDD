@@ -1,4 +1,4 @@
-package TestCases;
+package TestBase;
 
 import io.cucumber.testng.AbstractTestNGCucumberTests;
 import io.github.bonigarcia.wdm.WebDriverManager;
@@ -27,7 +27,7 @@ public class TestBase extends AbstractTestNGCucumberTests {
         driver = new ChromeDriver(options);
     }
 
-   //@AfterClass
+  @AfterClass
     public void closeBrowser() {
         driver.quit();
     }

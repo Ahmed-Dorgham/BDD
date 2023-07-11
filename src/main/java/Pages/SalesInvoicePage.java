@@ -23,6 +23,11 @@ public class SalesInvoicePage extends UtilitiesMethods {
     private WebElement POS_invoice_checkbox;
     private WebElement add_new_row_button;
     private WebElement close_icon;
+    private WebElement setting_icon;
+    private WebElement returned_amount;
+    private WebElement paid_element;
+    private WebElement yes_button;
+    private WebElement clear_cash_element;
     private WebElement item_field;
     private WebElement alert_notification;
     private WebElement error_message_after_enqueue;
@@ -44,6 +49,8 @@ public class SalesInvoicePage extends UtilitiesMethods {
     private WebElement date_field;
     private WebElement client_name_field;
     private WebElement show_account_button;
+    private WebElement create_return_note_button;
+    private WebElement make_payment_entry_button;
     private WebElement make_payment_entry;
     private WebElement sales_list_icon;
     private WebElement submitted_icon;
@@ -51,6 +58,8 @@ public class SalesInvoicePage extends UtilitiesMethods {
     private WebElement total_amount;
     private WebElement client_name;
     private WebElement received_message;
+    private WebElement sales_anchor;
+    private WebElement return_notes;
     private WebElement stock_validation_message;
     private WebElement error_validation_message;
     private WebElement from_delivery_note;
@@ -72,6 +81,7 @@ public class SalesInvoicePage extends UtilitiesMethods {
     private WebElement delivery_note_validation_message;
     private WebElement backend_validation_message;
     private WebElement INVJ;
+    private WebElement receipt_vouchers;
     //private WebElement INV;
 
 
@@ -133,7 +143,6 @@ public class SalesInvoicePage extends UtilitiesMethods {
                         ("//div[@id='page-Form/Sales Invoice']//div[contains(@class,'control-value like-disabled-input ')]"))
                 .toLeftOf(basic_price));
         wait.until(ExpectedConditions.textToBePresentInElement(amount_sar, "100"));
-
     }
 
     /****************************************************************************************************************************-*/
@@ -476,7 +485,7 @@ public class SalesInvoicePage extends UtilitiesMethods {
         // click_on_element(selected_delivery_note);
         js.executeScript("arguments[0].click();", selected_delivery_note);
         js.executeScript("arguments[0].click();", get_button);
-         Thread.sleep(10000);
+        Thread.sleep(10000);
     }
 
     /************************************************************************************************************************************/
@@ -541,11 +550,13 @@ public class SalesInvoicePage extends UtilitiesMethods {
 
     /************************************************************************************************************************************/
     public String get_invoice_id_name() {
-        wait = new WebDriverWait(driver, ofSeconds(30));
+        wait = new WebDriverWait(driver, ofSeconds(300));
         invoice_id_name = driver.findElement(By.xpath
                 ("//div[@id='page-Form/Sales Invoice']//h5"));
         wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath
                 ("//div[@id='page-Form/Sales Invoice']//h5"), "INV"));
+        wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath
+                ("//div[@id='page-Form/Sales Invoice']//span[@class='label label-success']"), "تم اعتماده"));
         invoice_id_name = driver.findElement(By.xpath
                 ("//div[@id='page-Form/Sales Invoice']//h5"));
         return invoice_id_name.getText();
@@ -670,6 +681,29 @@ public class SalesInvoicePage extends UtilitiesMethods {
     }
 
     /*************************************************************************************************************************************************/
+    public ReceiptVoucherPage click_on_make_paymen_entry() {
+        wait = new WebDriverWait(driver, ofSeconds(20));
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
+                "//button[contains(@id,'appframe-btn-عمل قيد دفعة')]")));
+        make_payment_entry_button = driver.findElement(By.xpath(
+                "//button[contains(@id,'appframe-btn-عمل قيد دفعة')]"));
+        click_on_element(make_payment_entry_button);
+        return new ReceiptVoucherPage(driver);
+    }
+
+    /*************************************************************************************************************************************************/
+
+    public ReturnNotePage  click_on_create_return_note() {
+        wait = new WebDriverWait(driver, ofSeconds(300));
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.id(
+                "appframe-btn-إنشاء مذكرة إرجاع")));
+        create_return_note_button = driver.findElement(By.id(
+                "appframe-btn-إنشاء مذكرة إرجاع"));
+        click_on_element(create_return_note_button);
+        return new ReturnNotePage(driver);
+    }
+
+    /*************************************************************************************************************************************************/
     public ReceiptVoucherPage make_receipt_voucher() {
         wait = new WebDriverWait(driver, ofSeconds(300));
         wait.until(ExpectedConditions.presenceOfElementLocated(By.id(
@@ -752,7 +786,7 @@ public class SalesInvoicePage extends UtilitiesMethods {
     public WebElement client_name() {
         client_name = driver.findElement(By.xpath
                 ("(//div[@id='tab_1']//div[@class='control-value like-disabled-input']//a)[1]"));
-       // System.out.println("the client name for this  sales invoice is " + client_name.getText());
+        // System.out.println("the client name for this  sales invoice is " + client_name.getText());
         return client_name;
     }
 
@@ -760,7 +794,7 @@ public class SalesInvoicePage extends UtilitiesMethods {
     public WebElement total_amount() {
         total_amount = driver.findElement(By.xpath
                 ("(//div[@id='tab_1']//div[@class='control-value']//div)[4]"));
-       // System.out.println("the total amount of sales invoice is " + total_amount.getText());
+        // System.out.println("the total amount of sales invoice is " + total_amount.getText());
         return total_amount;
     }
 
@@ -799,12 +833,14 @@ public class SalesInvoicePage extends UtilitiesMethods {
         js.executeScript("window.scrollTo(0,800)");
     }
 
+    /************************************************************************************************************************************/
     public void scroll_up() {
         js = (JavascriptExecutor) driver;
 
         js.executeScript("window.scrollTo(0,0)");
     }
 
+    /************************************************************************************************************************************/
     public void waiting_for_element_to_be_selected(WebElement element) {
         wait = new WebDriverWait(driver, ofSeconds(60));
         wait.until(ExpectedConditions.elementToBeSelected(element));
@@ -816,6 +852,7 @@ public class SalesInvoicePage extends UtilitiesMethods {
         wait.until(ExpectedConditions.not(ExpectedConditions.elementToBeSelected(element)));
     }
 
+    /************************************************************************************************************************************/
     public void scroll_down_and_wait() {
         js = (JavascriptExecutor) driver;
         wait = new WebDriverWait(driver, ofSeconds(300));
@@ -831,4 +868,83 @@ public class SalesInvoicePage extends UtilitiesMethods {
         //wait.until(ExpectedConditions.textToBePresentInElement(amount_sar, "100"));
     }
 
+    public ReturnNotesListPage open_return_notes_list_page() {
+        js = (JavascriptExecutor) driver;
+        wait = new WebDriverWait(driver, ofSeconds(300));
+        sales_anchor = driver.findElement(By.id("module-anchor-Selling"));
+        js.executeScript("arguments[0].click();", sales_anchor);
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.id("sidebar-selling-return-note")));
+        return_notes = driver.findElement(By.id("sidebar-selling-return-note"));
+        js.executeScript("arguments[0].click();", return_notes);
+        return new ReturnNotesListPage(driver);
+
+    }
+
+    /**********************************************************************************************************************************************/
+    public ReceiptVoucherssListPage open_receipt_vouchers_list_page() {
+        js = (JavascriptExecutor) driver;
+        wait = new WebDriverWait(driver, ofSeconds(300));
+        sales_anchor = driver.findElement(By.id("module-anchor-Selling"));
+        js.executeScript("arguments[0].click();", sales_anchor);
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.id("sidebar-selling-receipt-voucher")));
+        receipt_vouchers = driver.findElement(By.id("sidebar-selling-receipt-voucher"));
+        js.executeScript("arguments[0].click();", receipt_vouchers);
+        return new ReceiptVoucherssListPage(driver);
+
+    }
+
+    /**********************************************************************************************************************************************/
+    public void clear_cash() {
+        js = (JavascriptExecutor) driver;
+        wait = new WebDriverWait(driver, ofSeconds(30));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath
+                ("//h5[contains(text(),'INV')]")));
+        wait.until(ExpectedConditions.elementToBeClickable(By.xpath
+                ("//i[@data-kooltip='إعداد']")));
+        setting_icon = driver.findElement(By.xpath
+                ("//i[@data-kooltip='إعداد']"));
+        // click_on_element(settingIcon);
+        js.executeScript("arguments[0].click();", setting_icon);
+        wait.until(ExpectedConditions.elementToBeClickable(By.xpath
+                ("//li[@id='clear-cach-icon']")));
+        clear_cash_element = driver.findElement(By.xpath
+                ("//li[@id='clear-cach-icon']"));
+        click_on_element(clear_cash_element);
+        //js.executeScript("arguments[0].click();", clear_cash_element);
+        wait.until(ExpectedConditions.elementToBeClickable(By.xpath
+                ("//button[@class='btn btn-info btn-yes']")));
+        yes_button = driver.findElement(By.xpath
+                ("//button[@class='btn btn-info btn-yes']"));
+        click_on_element(yes_button);
+        wait.until(ExpectedConditions.titleContains("Dafater"));
+
+
+    }
+    /**********************************************************************************************************************************************/
+
+    public WebElement get_returned_amount_element() {
+        js = (JavascriptExecutor) driver;
+        wait = new WebDriverWait(driver, ofSeconds(300));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath
+                ("//div[@id='page-Form/Sales Invoice']//div[@class='progress-area']//h5")));
+        returned_amount = driver.findElement(By.xpath
+                ("//div[@id='page-Form/Sales Invoice']//div[@class='progress-area']//h5"));
+        return returned_amount;
+    }
+    /**********************************************************************************************************************************************/
+
+    public WebElement get_paid_element() {
+        js = (JavascriptExecutor) driver;
+        wait = new WebDriverWait(driver, ofSeconds(300));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath
+                ("//div[@id='page-Form/Sales Invoice']//div[@class='progress-area']//h5")));
+        paid_element = driver.findElement(By.xpath
+                ("//div[@id='page-Form/Sales Invoice']//div[@class='progress-area']//h5"));
+        return paid_element;
+    }
+    /**********************************************************************************************************************************************/
+
+    public void refersh_page() {
+        driver.navigate().refresh();
+    }
 }

@@ -1,7 +1,7 @@
 package StepDefinition;
 
 import Pages.*;
-import TestCases.TestBase;
+import TestBase.TestBase;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;

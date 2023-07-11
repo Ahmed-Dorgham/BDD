@@ -1,11 +1,11 @@
 package runner;
 
-import TestCases.TestBase;
+import TestBase.TestBase;
 import io.cucumber.testng.CucumberOptions;
 
 @CucumberOptions(
-        features = "src/test/java/features/SalesInvoice/SubmitSalesInvoice_PositiveCase.feature",
-        glue = {"StepDefinition.SubmitSalesInvoice_PositiveCase"},
+        features = "src/test/java/features/ReceiptVoucher/MakeReceiptVoucher.feature",
+        glue = {"StepDefinition.MakeReceiptVoucher"},
         plugin = {"pretty", "html:target/cucumber-reports/cucumber.html"},
         tags = "not @Skip"
 )

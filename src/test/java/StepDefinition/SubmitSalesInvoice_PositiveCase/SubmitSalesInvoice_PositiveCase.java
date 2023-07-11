@@ -1,15 +1,12 @@
 package StepDefinition.SubmitSalesInvoice_PositiveCase;
 
 import Pages.*;
-import TestCases.TestBase;
+import TestBase.TestBase;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.By;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
-
-import java.time.Duration;
 
 public class SubmitSalesInvoice_PositiveCase extends TestBase {
 
@@ -64,7 +61,6 @@ public class SubmitSalesInvoice_PositiveCase extends TestBase {
 
     @Given("user in dafater login page")
     public void open_login_page() {
-
         driver.get(vm_link);
         // driver.manage().window().maximize();
         Assert.assertEquals(driver.getCurrentUrl(), vm_link);

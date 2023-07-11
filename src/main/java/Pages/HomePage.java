@@ -20,6 +20,7 @@ public class HomePage extends UtilitiesMethods {
     private WebElement sales_anchor;
     private WebElement stock_anchor;
     private WebElement sales_invoices;
+    private WebElement clients;
     private WebElement items;
     private WebElement setting_icon;
     private WebElement setup_element;
@@ -59,6 +60,19 @@ public class HomePage extends UtilitiesMethods {
     }
 
     /**********************************************************************************************************************************************/
+    public ClientsListPage open_clients_list_page() {
+        js = (JavascriptExecutor) driver;
+        wait = new WebDriverWait(driver, ofSeconds(300));
+        sales_anchor = driver.findElement(By.id("module-anchor-Selling"));
+        js.executeScript("arguments[0].click();", sales_anchor);
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.id("sidebar-selling-customer")));
+        sales_invoices = driver.findElement(By.id("sidebar-selling-customer"));
+        js.executeScript("arguments[0].click();", sales_invoices);
+        return new ClientsListPage(driver);
+    }
+
+    /**********************************************************************************************************************************************/
+
     public ItemsListPage open_items_list_page() {
         js = (JavascriptExecutor) driver;
         wait = new WebDriverWait(driver, ofSeconds(300));

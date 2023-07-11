@@ -13,8 +13,12 @@ import java.util.concurrent.TimeoutException;
 
 import static java.time.Duration.ofSeconds;
 
-public class SalesInvoicesListPage extends UtilitiesMethods {
+public class ClientsListPage extends UtilitiesMethods {
     private WebDriver driver;
+
+    public ClientsListPage(WebDriver driver) {
+        this.driver = driver;
+    }
     private JavascriptExecutor js;
     private WebDriverWait wait;
     private Wait<WebDriver> fluent_Wait;
@@ -23,7 +27,6 @@ public class SalesInvoicesListPage extends UtilitiesMethods {
     private WebElement message;
     private WebElement submitted_icon;
     private WebElement new_button;
-    private WebElement paid_invoice;
     private WebElement alert_notification;
     private WebElement id_checkbox;
     private List<WebElement> id_checkboxes;
@@ -52,35 +55,20 @@ public class SalesInvoicesListPage extends UtilitiesMethods {
     private WebElement icon_element_in_row;
     private WebElement submitted_icon_in_row;
     private WebElement invoice_id_in_row;
+
     private List<WebElement> rows_in_result_list;
 
-    public SalesInvoicesListPage(WebDriver driver) {
-        this.driver = driver;
-    }
+
 
     /***********************************************************************************************************************/
-    public SalesInvoicePage open_new_sales_invoice() {
+    public ClientPage open_new_client() {
         js = (JavascriptExecutor) driver;
         wait = new WebDriverWait(driver, ofSeconds(300));
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath
                 ("//button[@id='appframe-btn-جديد']")));
         new_button = driver.findElement(By.id("appframe-btn-جديد"));
         js.executeScript("arguments[0].click();", new_button);
-        return new SalesInvoicePage(driver);
-    }
-
-    /*******************************************************************************************************************************/
-    public SalesInvoicePage open_paid_invoice() {
-        js = (JavascriptExecutor) driver;
-        wait = new WebDriverWait(driver, ofSeconds(300));
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath
-                ("//button[@id='appframe-btn-جديد']")));
-        js.executeScript("window.scrollBy(0,400)");
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath
-                ("(//div[@class='result-list']//div[@class='doclist-row row']//div)[2]//a")));
-        paid_invoice = driver.findElement(By.xpath("(//div[@class='result-list']//div[@class='doclist-row row']//div)[2]//a"));
-        js.executeScript("arguments[0].click();", paid_invoice);
-        return new SalesInvoicePage(driver);
+        return new ClientPage(driver);
     }
 
     /*******************************************************************************************************************************/
@@ -497,7 +485,7 @@ public class SalesInvoicesListPage extends UtilitiesMethods {
             wait.until(ExpectedConditions.not(ExpectedConditions.attributeToBe(locator, attribute_name, attribute_value)));
             return icon_element_in_row;
         } catch (Exception exception) {
-            //     System.out.println("this invoice still in enqueue after 5 minutes and may be there is unexpected behaviour happen  ");
+       //     System.out.println("this invoice still in enqueue after 5 minutes and may be there is unexpected behaviour happen  ");
 
             return icon_element_in_row;
         }
@@ -523,19 +511,20 @@ public class SalesInvoicesListPage extends UtilitiesMethods {
     /*****************************************************-******************************************************************************************/
     public WebElement get_invoice_id_in_row_after_action(int index) {
 
-        try {
-            result_list = driver.findElement(By.xpath
-                    ("//div[@id='page-List/Sales Invoice']//div[@class='result']//div[@class='result-list']"));
+     try {
+         result_list = driver.findElement(By.xpath
+                 ("//div[@id='page-List/Sales Invoice']//div[@class='result']//div[@class='result-list']"));
 
-            rows_in_result_list = result_list.findElements(By.className("list-row"));
-            invoice_id_in_row = rows_in_result_list.get(index).findElement(By.partialLinkText("INV"));
+        rows_in_result_list = result_list.findElements(By.className("list-row"));
+        invoice_id_in_row = rows_in_result_list.get(index).findElement(By.partialLinkText("INV"));
 
-            return invoice_id_in_row;
-        } catch (Exception exception) {
-            return invoice_id_in_row;
-        }
+        return invoice_id_in_row;
+     }
+     catch (Exception exception)
+     {
+         return invoice_id_in_row;
+     }
     }
-
     /*****************************************************-******************************************************************************************/
 
     public WebElement get_invoice_id_in_row_before_action(int index) {
@@ -600,7 +589,7 @@ public class SalesInvoicesListPage extends UtilitiesMethods {
             wait.until(ExpectedConditions.attributeToBe(locator, attribute_name, attribute_value));
             return icon_element_in_row;
         } catch (Exception exception) {
-            // System.out.println("enqueue icon for the below invoice had been disappeared now ");
+           // System.out.println("enqueue icon for the below invoice had been disappeared now ");
             return icon_element_in_row;
         }
 
@@ -694,7 +683,4 @@ public class SalesInvoicesListPage extends UtilitiesMethods {
         return element;
     }
 
-    public void refersh_page() {
-        driver.navigate().refresh();
-    }
 }
